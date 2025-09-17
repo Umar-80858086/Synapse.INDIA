@@ -1,397 +1,538 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Career Explorer • Global Tech / Medical / Non‑Tech Pathways</title>
-    <meta name="description" content="Interactive pathway explorer after 10th or 10+2: technical, medical and non‑technical jobs with salaries, affordability, dark mode, search, filters and animated navigation." />
-    <link rel="stylesheet" href="pathway.css" />
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Career Explorer — Global Opportunities</title>
+
+  <!-- Poppins font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #fffbeb;            /* bright cream background */
+      --card-bg: #ffffff;
+      --accent: #0d47a1;        /* steel blue */
+      --accent-dark:#08306b;
+      --text: #111;
+      --muted: #555;
+      --border: 2px solid #000; /* heavy black border for high contrast */
+      --radius: 14px;
+      --shadow: 0 8px 20px rgba(0,0,0,0.14);
+    }
+
+    html,body{height:100%;margin:0;}
+    body{
+      font-family:'Poppins',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    header{
+      text-align:center;
+      padding:20px;
+      background:var(--accent);
+      color:#fff;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      border:var(--border);
+      margin-bottom:26px;
+    }
+    header h1{margin:0;font-size:28px;letter-spacing:-0.5px;}
+    header p{margin:8px 0 0;color:#e8f0ff;font-weight:600;}
+
+    .controls{
+      max-width:1200px;
+      margin:0 auto 22px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .search {
+      flex:1 1 360px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .search input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:var(--border);
+      box-shadow:var(--shadow);
+      font-weight:600;
+      outline:none;
+    }
+    .chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .chip{
+      padding:10px 14px;
+      border-radius:999px;
+      border:var(--border);
+      background:var(--card-bg);
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+    .chip.active{background:linear-gradient(90deg,var(--accent),var(--accent-dark)); color:#fff;}
+
+    /* Grid of category blocks */
+    .container{
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    .category{
+      margin-bottom:28px;
+    }
+    .category h2{
+      margin:0 0 14px;
+      font-size:20px;
+      color:var(--accent-dark);
+      text-transform:uppercase;
+      letter-spacing:1px;
+      display:inline-block;
+      padding-bottom:6px;
+      border-bottom:var(--border);
+    }
+
+    .card-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:20px;
+    }
+
+    .country-card{
+      background:var(--card-bg);
+      border:var(--border);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+      transition:transform .22s ease, box-shadow .22s ease;
+    }
+    .country-card:hover{ transform:translateY(-8px); box-shadow:0 18px 34px rgba(0,0,0,.22); }
+
+    .country-card::before{
+      content:"";
+      position:absolute; left:0; top:0; width:100%; height:8px;
+      background:linear-gradient(90deg,var(--accent),#64b5f6);
+    }
+
+    .country-card h3{
+      margin:0 0 8px; font-size:18px; color:var(--accent-dark);
+      display:inline-block; padding-bottom:8px; border-bottom:var(--border);
+    }
+    .country-card ul{margin:12px 0 0;padding-left:18px;color:var(--muted); font-weight:600;}
+    .country-card li{margin:8px 0;}
+
+    .meta-row{
+      display:flex; justify-content:space-between; gap:10px; margin-top:14px; align-items:center;
+    }
+    .pill{padding:8px 12px;border-radius:10px;border:var(--border);font-weight:700;background:#fff;}
+
+    footer{
+      max-width:1200px; margin:28px auto 0; text-align:center; color:var(--muted); font-weight:600;
+    }
+
+    /* Responsive */
+    @media (max-width:760px){
+      header h1{font-size:20px}
+      .search{flex:1 1 100%}
+    }
+  </style>
 </head>
-<body class="pathway-page">
-    <div class="bg-animation" aria-hidden="true"></div>
-    <header class="hero">
-        <h1>Career Explorer: Global Opportunities</h1>
-        <p>Compare regions, scan salary bands, and plan learning focus across Tech, Medical and Non‑Tech sectors. Use live search, filters and dark mode for a focused experience.</p>
-        <div class="badge-cloud">
- <button id="toggleDark" class="toggle-dark" type="button" role="switch" aria-pressed="false"><i class="ri-moon-line"></i><span>Dark Mode</span></button>
-        </div>
-    </header>
+<body>
 
-    <nav class="nav-pills" id="mainNav">
-        <a href="#tech" class="active" data-nav><i class="ri-cpu-line"></i> Tech</a>
-        <a href="#medical" data-nav><i class="ri-hospital-line"></i> Medical</a>
-        <a href="#nontech" data-nav><i class="ri-briefcase-line"></i> Non‑Tech</a>
-    </nav>
+  <header>
+    <h1>Career Explorer — Global Opportunities</h1>
+    <p>Fast comparison of job bands and opportunity types across countries. Filter, search, act.</p>
+  </header>
 
-    <div class="controls-bar">
-        <div class="search-wrap"><input id="searchBox" type="text" placeholder="Search country or role..." aria-label="Search countries or roles" /><i class="ri-search-line" aria-hidden="true"></i></div>
-        <div class="filter-chips">
-            <button class="filter-btn active" data-filter="all" type="button"><i class="ri-check-double-line"></i> All</button>
-            <button class="filter-btn" data-filter="high" type="button"><i class="ri-award-line"></i> High Pay</button>
-            <button class="filter-btn" data-filter="moderate" type="button"><i class="ri-scales-3-line"></i> Moderate</button>
-            <button class="filter-btn" data-filter="emerging" type="button"><i class="ri-seedling-line"></i> Emerging</button>
-        </div>
-       
+  <div class="controls container">
+    <div class="search">
+      <input id="searchBox" placeholder="Search country, role, or keyword — e.g. 'software', 'nurses', 'Germany'">
     </div>
 
-    <main class="section-wrapper">
-        <!-- TECH -->
-        <section class="category reveal" id="tech" data-section>
-            <div class="category-header">
-                <h2><i class="ri-cpu-line"></i> Technical Jobs – Global Overview</h2>
-                <span class="meta">ENGINEERING • SOFTWARE • SYSTEMS</span>
-            </div>
-            <div class="country-grid">
-                <div class="country-block" data-country="united states usa" data-roles="software data civil mechanical electrical aerospace automotive telecom chemical petroleum robotics cybersecurity devops cloud" data-tier="high">
-                    <h3>🇺🇸 United States</h3>
-                    <ul>
-                        <li>Software / DevOps — $90k–150k</li>
-                        <li>AI / Data — $100k–160k</li>
-                        <li>Robotics / Aerospace — $85k–135k</li>
-                        <li>Core Eng (Civil/Mech/Elec) — $70k–115k</li>
-                        <li class="afford">Afford: CoL high in CA/NY; better TX & Midwest.</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="canada" data-roles="software civil electrical mechanical mining energy it ai ml support" data-tier="moderate">
-                    <h3>🇨🇦 Canada</h3>
-                    <ul>
-                        <li>Software — C$70k–110k</li>
+    <div class="chips" role="tablist" aria-label="Filters">
+      <button class="chip active" data-filter="all">All</button>
+      <button class="chip" data-filter="tech">Tech</button>
+      <button class="chip" data-filter="medical">Medical</button>
+      <button class="chip" data-filter="nontech">Nontech</button>
+    </div>
+  </div>
+
+  <main class="container">
+
+    <!-- TECH -->
+    <section class="category" data-category="tech">
+      <h2>Technical Jobs — Global Overview</h2>
+      <div class="card-grid">
+        <article class="country-card" data-tags="usa software ai data robotics aerospace civil mechanical" data-kind="tech">
+          <h3>🇺🇸 United States</h3>
+          <ul>
+            <li>Software / DevOps — $90k–150k</li>
+            <li>AI / Data — $100k–160k</li>
+            <li>Robotics / Aerospace — $85k–135k</li>
+            <li>Core Eng (Civil/Mech/Elec) — $70k–115k</li>
+          </ul>
+          <div class="meta-row">
+            <span class="pill">Tier: High</span>
+            <span style="color:var(--muted);font-weight:700">Note: High CoL in CA/NY</span>
+          </div>
+        </article>
+
+        <article class="country-card" data-tags="canada software ai mining energy" data-kind="tech">
+          <h3>🇨🇦 Canada</h3>
+          <ul>
+           <li>Software — C$70k–110k</li>
                         <li>AI / ML — C$90k–140k</li>
                         <li>Mining / Energy — C$75k–120k</li>
                         <li>IT Support — C$50k–75k</li>
-                        <li class="afford">Afford: Toronto/Vancouver costly; Calgary balanced.</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="united kingdom uk" data-roles="software cyber civil mechanical electrical chemical aerospace transport cloud" data-tier="moderate">
-                    <h3>🇬🇧 United Kingdom</h3>
-                    <ul>
-                        <li>Software / Cyber — £35k–70k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">Toronto/Vancouver costly</span></div>
+        </article>
+
+        <article class="country-card" data-tags="uk software cloud cyber" data-kind="tech">
+          <h3>🇬🇧 United Kingdom</h3>
+          <ul>
+           <li>Software / Cyber — £35k–70k</li>
                         <li>Cloud Engineer — £45k–80k</li>
                         <li>Core Eng — £35k–55k</li>
                         <li>Aerospace / Chemical — £40k–70k</li>
-                        <li class="afford">Afford: London high; regional cities cheaper.</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="germany" data-roles="automotive mechanical electrical civil chemical software robotics renewable energy" data-tier="high">
-                    <h3>🇩🇪 Germany</h3>
-                    <ul>
-                        <li>Automotive / Robotics — €50k–95k</li>
-                        <li>Mech / Elec — €48k–78k</li>
-                        <li>Software / AI — €50k–90k</li>
-                        <li>Renewables — €48k–75k</li>
-                        <li class="afford">Afford: Munich costly; Berlin moderate.</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="netherlands" data-roles="software data civil mechanical aerospace telecom renewable" data-tier="moderate">
-                    <h3>🇳🇱 Netherlands</h3>
-                    <ul>
-                        <li>Software / Data — €50k–90k</li>
-                        <li>Aero / Telecom — €45k–95k</li>
-                        <li>Civil / Mechanical — €45k–70k</li>
-                        <li>Renewables — €48k–80k</li>
-                        <li class="afford">Afford: Amsterdam high; Eindhoven better.</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="scandinavia sweden norway denmark" data-roles="software civil electrical mechanical energy robotics telecom" data-tier="high">
-                    <h3>🇸🇪/🇳🇴/🇩🇰 Scandinavia</h3>
-                    <ul>
-                        <li>Software / Robotics — €50k–95k</li>
-                        <li>Energy (Renewables) — €55k–90k</li>
-                        <li>Core Eng — €45k–75k</li>
-                        <li>Telecom / Networks — €50k–80k</li>
-                        <li class="afford">Afford: High costs offset by welfare.</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="japan" data-roles="software mechanical electrical automotive robotics" data-tier="emerging">
-                    <h3>🇯🇵 Japan</h3>
-                    <ul>
-                        <li>Software — ¥5m–9m</li>
-                        <li>Robotics / Automotive — ¥5.5m–10m</li>
-                        <li>Mechanical / Electrical — ¥4m–7.5m</li>
-                        <li class="afford">Afford: Tokyo high; regional cities lower.</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="australia" data-roles="civil mechanical electrical mining software energy" data-tier="high">
-                    <h3>🇦🇺 Australia</h3>
-                    <ul>
-                        <li>Mining / Energy — A$80k–140k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">London premium</span></div>
+        </article>
+
+        <article class="country-card" data-tags="germany automotive mechanical robotics renewable" data-kind="tech">
+          <h3>🇩🇪 Germany</h3>
+          <ul>
+            <li>Automotive / Robotics — €50k–95k</li>
+            <li>Mechanical / Electrical — €48k–78k</li>
+            <li>Renewables — €48k–75k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: High</span><span style="color:var(--muted);font-weight:700">Munich high, Berlin moderate</span></div>
+        </article>
+
+        <article class="country-card" data-tags="netherlands software data aerospace" data-kind="tech">
+          <h3>🇳🇱 Netherlands</h3>
+          <ul>
+            <li>Software / Data — €50k–90k</li>
+            <li>Aerospace / Telecom — €45k–95k</li>
+            <li>Civil / Mechanical — €45k–70k</li><li>Software / AI — €50k–90k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">Amsterdam premium</span></div>
+        </article>
+
+        <article class="country-card" data-tags="scandinavia software energy robotics" data-kind="tech">
+          <h3>🇸🇪/🇳🇴/🇩🇰 Scandinavia</h3>
+          <ul>
+            <li>Software / Robotics — €50k–95k</li>
+            <li>Energy (Renewables) — €55k–90k</li>
+            <li>Core Eng — €45k–75k</li><li>Telecom / Networks — €50k–80k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: High</span><span style="color:var(--muted);font-weight:700">Welfare offsets CoL</span></div>
+        </article>
+
+        <article class="country-card" data-tags="japan software robotics automotive" data-kind="tech">
+          <h3>🇯🇵 Japan</h3>
+          <ul>
+            <li>Software — ¥5m–9m</li>
+            <li>Robotics / Automotive — ¥5.5m–10m</li>
+            <li>Mechanical / Electrical — ¥4m–7.5m</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Emerging</span><span style="color:var(--muted);font-weight:700">Tokyo premiums</span></div>
+        </article>
+
+        <article class="country-card" data-tags="singapore software data electronics" data-kind="tech">
+          <h3>🇸🇬 Singapore</h3>
+          <ul>
+            <li>Software / Data — S$60k–110k</li>
+            <li>Civil / Mechanical — S$50k–85k</li>
+            <li>Electronics / Aerospace — S$55k–100k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: High</span><span style="color:var(--muted);font-weight:700">Housing expensive</span></div>
+        </article>
+                <article class="country-card" data-tags="singapore software data electronics" data-kind="tech">
+          <h3>🇦🇺 Australia</h3>
+          <ul>
+<li>Mining / Energy — A$80k–140k</li>
                         <li>Software — A$80k–120k</li>
                         <li>Civil / Mech / Elec — A$70k–110k</li>
-                        <li class="afford">Afford: Sydney high; Adelaide moderate.</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="singapore" data-roles="software data civil mechanical electronics aerospace" data-tier="high">
-                    <h3>🇸🇬 Singapore</h3>
-                    <ul>
-                        <li>Software / Data — S$60k–110k</li>
-                        <li>Civil / Mechanical — S$50k–85k</li>
-                        <li>Electronics / Aerospace — S$55k–100k</li>
-                        <li class="afford">Afford: Housing expensive; strong salaries.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier:  moderate</span><span style="color:var(--muted);font-weight:700">Housing expensive</span></div>
+        </article>
+      </div>
+    </section>
 
-        <!-- MEDICAL -->
-        <section class="category reveal" id="medical" data-section>
-            <div class="category-header">
-                <h2><i class="ri-hospital-line"></i> Medical Jobs – Global Overview</h2>
-                <span class="meta">CLINICAL • HEALTH • CARE</span>
-            </div>
-            <div class="country-grid">
-                <div class="country-block" data-country="united states usa" data-roles="doctor surgeon nurse dentist pharmacist radiologist" data-tier="high">
-                    <h3>🇺🇸 United States</h3>
-                    <ul>
-                        <li>Surgeon / Specialist — $180k–500k</li>
-                        <li>Physician — $120k–220k</li>
-                        <li>Nurse (RN / NP) — $70k–140k</li>
-                        <li>Dentist / Pharmacist — $110k–220k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="canada" data-roles="doctor surgeon nurse dentist pharmacist" data-tier="high">
-                    <h3>🇨🇦 Canada</h3>
-                    <ul>
-                        <li>Doctor / Surgeon — C$180k–400k</li>
-                        <li>Nurse — C$60k–100k</li>
-                        <li>Dentist / Pharmacist — C$90k–200k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="united kingdom uk" data-roles="doctor surgeon nurse dentist pharmacist" data-tier="moderate">
-                    <h3>🇬🇧 United Kingdom</h3>
-                    <ul>
-                        <li>Consultant — £80k–120k</li>
-                        <li>Junior Doctor — £30k–45k</li>
-                        <li>Nurse — £28k–45k</li>
-                        <li>Dentist / Surgeon — £70k–150k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="germany" data-roles="doctor surgeon nurse dentist pharmacist" data-tier="moderate">
-                    <h3>🇩🇪 Germany</h3>
-                    <ul>
-                        <li>Doctor — €60k–120k</li>
-                        <li>Surgeon — €90k–150k</li>
-                        <li>Nurse — €35k–55k</li>
-                        <li>Dentist / Pharmacist — €50k–110k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="netherlands" data-roles="doctor surgeon nurse dentist pharmacist" data-tier="moderate">
-                    <h3>🇳🇱 Netherlands</h3>
-                    <ul>
-                        <li>Doctor / Surgeon — €70k–140k</li>
-                        <li>Nurse — €35k–55k</li>
-                        <li>Dentist / Pharmacist — €55k–110k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="scandinavia sweden norway denmark" data-roles="doctor surgeon nurse dentist pharmacist" data-tier="high">
-                    <h3>🇸🇪/🇳🇴/🇩🇰 Scandinavia</h3>
-                    <ul>
-                        <li>Doctor — €80k–140k</li>
-                        <li>Surgeon — €100k–160k</li>
-                        <li>Nurse — €40k–65k</li>
-                        <li>Dentist / Pharmacist — €55k–120k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="japan" data-roles="doctor nurse dentist pharmacist" data-tier="emerging">
-                    <h3>🇯🇵 Japan</h3>
-                    <ul>
-                        <li>Doctor — ¥10m–18m</li>
-                        <li>Nurse — ¥4m–6.5m</li>
-                        <li>Dentist / Pharmacist — ¥5m–12m</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="australia" data-roles="doctor surgeon nurse dentist pharmacist" data-tier="high">
-                    <h3>🇦🇺 Australia</h3>
-                    <ul>
-                        <li>Doctor — A$120k–200k</li>
-                        <li>Surgeon — A$200k–350k</li>
-                        <li>Nurse — A$65k–100k</li>
-                        <li>Dentist / Pharmacist — A$70k–180k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="singapore" data-roles="doctor surgeon nurse dentist pharmacist" data-tier="high">
-                    <h3>🇸🇬 Singapore</h3>
-                    <ul>
-                        <li>Doctor — S$100k–200k</li>
-                        <li>Surgeon — S$180k–300k</li>
-                        <li>Nurse — S$45k–75k</li>
-                        <li>Dentist / Pharmacist — S$60k–180k</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <!-- MEDICAL -->
+    <section class="category" data-category="medical">
+      <h2>Medical Jobs — Global Overview</h2>
+      <div class="card-grid">
+        <article class="country-card" data-tags="usa doctor surgeon nurse dentist pharmacist" data-kind="medical">
+          <h3>🇺🇸 United States</h3>
+          <ul>
+            <li>Surgeon / Specialist — $180k–500k</li>
+            <li>Physician — $120k–220k</li>
+            <li>Nurse (RN/NP) — $70k–140k</li><li>Dentist / Pharmacist — $110k–220k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: High</span><span style="color:var(--muted);font-weight:700">Rigorous licensing</span></div>
+        </article>
 
-        <!-- NON TECH -->
-        <section class="category reveal" id="nontech" data-section>
-            <div class="category-header">
-                <h2><i class="ri-briefcase-line"></i> High-Paying Non‑Tech Jobs</h2>
-                <span class="meta">OPERATIONS • SERVICE • ADMIN</span>
-            </div>
-            <div class="country-grid">
-                <div class="country-block" data-country="united states usa" data-roles="manager project coordinator healthcare admin flight attendant real estate" data-tier="moderate">
-                    <h3>🇺🇸 United States</h3>
-                    <ul>
+        <article class="country-card" data-tags="canada doctor nurse dentist" data-kind="medical">
+          <h3>🇨🇦 Canada</h3>
+          <ul>
+            <li>Doctor / Surgeon — C$180k–400k</li>
+            <li>Nurse — C$60k–100k</li>
+            <li>Dentist / Pharmacist — C$90k–200k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: High</span><span style="color:var(--muted);font-weight:700">Provincial licensure</span></div>
+        </article>
+
+        <article class="country-card" data-tags="uk doctor nurse consultant" data-kind="medical">
+          <h3>🇬🇧 United Kingdom</h3>
+          <ul>
+            <li>Consultant — £80k–120k</li>
+            <li>Junior Doctor — £30k–45k</li>
+            <li>Nurse — £28k–45k</li>
+            <li>Dentist / Surgeon — £70k–150k</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">NHS pathways</span></div>
+        </article>
+
+<article class="country-card" data-tags="germany" data-kind="medical">
+  <h3>🇩🇪 Germany</h3>
+  <ul>
+    <li>Doctor — €60k–120k</li>
+    <li>Surgeon — €90k–150k</li>
+    <li>Nurse — €35k–55k</li>
+    <li>Dentist / Pharmacist — €50k–110k</li>
+  </ul>
+  <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">Stable demand</span></div>
+</article>
+
+<article class="country-card" data-tags="netherlands" data-kind="medical">
+  <h3>🇳🇱 Netherlands</h3>
+  <ul>
+    <li>Doctor / Surgeon — €70k–140k</li>
+    <li>Nurse — €35k–55k</li>
+    <li>Dentist / Pharmacist — €55k–110k</li>
+  </ul>
+  <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">Stable demand</span></div>
+</article>
+
+<article class="country-card" data-tags="scandinavia sweden norway denmark" data-kind="medical">
+  <h3>🇸🇪/🇳🇴/🇩🇰 Scandinavia</h3>
+  <ul>
+    <li>Doctor — €80k–140k</li>
+    <li>Surgeon — €100k–160k</li>
+    <li>Nurse — €40k–65k</li>
+    <li>Dentist / Pharmacist — €55k–120k</li>
+  </ul>
+  <div class="meta-row"><span class="pill">Tier: High</span><span style="color:var(--muted);font-weight:700">Competitive market</span></div>
+</article>
+
+<article class="country-card" data-tags="japan" data-kind="medical">
+  <h3>🇯🇵 Japan</h3>
+  <ul>
+    <li>Doctor — ¥10m–18m</li>
+    <li>Nurse — ¥4m–6.5m</li>
+    <li>Dentist / Pharmacist — ¥5m–12m</li>
+  </ul>
+  <div class="meta-row"><span class="pill">Tier: Emerging</span><span style="color:var(--muted);font-weight:700">Growing opportunities</span></div>
+</article>
+
+<article class="country-card" data-tags="australia" data-kind="medical">
+  <h3>🇦🇺 Australia</h3>
+  <ul>
+    <li>Doctor — A$120k–200k</li>
+    <li>Surgeon — A$200k–350k</li>
+    <li>Nurse — A$65k–100k</li>
+    <li>Dentist / Pharmacist — A$70k–180k</li>
+  </ul>
+  <div class="meta-row"><span class="pill">Tier: High</span><span style="color:var(--muted);font-weight:700">Competitive market</span></div>
+</article>
+
+<article class="country-card" data-tags="singapore" data-kind="medical">
+  <h3>🇸🇬 Singapore</h3>
+  <ul>
+    <li>Doctor — S$100k–200k</li>
+    <li>Surgeon — S$180k–300k</li>
+    <li>Nurse — S$45k–75k</li>
+    <li>Dentist / Pharmacist — S$60k–180k</li>
+  </ul>
+  <div class="meta-row"><span class="pill">Tier: High</span><span style="color:var(--muted);font-weight:700">Competitive market</span></div>
+</article>
+
+      </div>
+    </section>
+
+
+
+
+    <!-- NON-TECH -->
+    <section class="category" data-category="nontech">
+      <h2>High-Paying Non-Tech Jobs</h2>
+      <div class="card-grid">
+        <article class="country-card" data-tags="usa manager project healthcare admin realestate" data-kind="nontech">
+          <h3>🇺🇸 United States</h3>
+          <ul>
                         <li>Store / Corporate Manager — $55k–90k</li>
                         <li>Project Coordinator — $50k–75k</li>
                         <li>Healthcare Admin — $45k–65k</li>
                         <li>Flight Attendant — $50k–80k</li>
                         <li>Real Estate Agent — Commission</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="canada" data-roles="retail manager airport staff hr hospitality hotel manager" data-tier="moderate">
-                    <h3>🇨🇦 Canada</h3>
-                    <ul>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">Regional variance strong</span></div>
+        </article>
+
+        <article class="country-card" data-tags="canada retail manager hotel hr" data-kind="nontech">
+          <h3>🇨🇦 Canada</h3>
+          <ul>
                         <li>Retail / Store Manager — C$45k–70k</li>
                         <li>Airport Ground Staff — C$40k–60k</li>
                         <li>HR Coordinator — C$45k–65k</li>
                         <li>Hotel Manager — C$50k–75k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="united kingdom uk" data-roles="retail manager museum hospitality supervisor exam invigilator healthcare admin" data-tier="moderate">
-                    <h3>🇬🇧 United Kingdom</h3>
-                    <ul>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">Urban pay premiums</span></div>
+        </article>
+
+        <article class="country-card" data-tags="uk retail hospitality museum admin" data-kind="nontech">
+          <h3>🇬🇧 United Kingdom</h3>
+          <ul>
                         <li>Retail Manager — £28k–45k</li>
                         <li>Museum / Heritage Manager — £30k–50k</li>
                         <li>Hospitality Supervisor — £28k–45k</li>
                         <li>Exam Invigilator — £10–15/hr</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="germany" data-roles="logistics warehouse factory supervisor hr office admin customer support hospitality" data-tier="moderate">
-                    <h3>🇩🇪 Germany</h3>
-                    <ul>
-                        <li>Logistics Coordinator — €35k–50k</li>
-                        <li>Factory Supervisor — €32k–48k</li>
-                        <li>HR / Office Admin — €30k–45k</li>
-                        <li>Customer Support — €28k–42k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="netherlands" data-roles="supply chain warehouse university admin ngo event coordinator" data-tier="moderate">
-                    <h3>🇳🇱 Netherlands</h3>
-                    <ul>
-                        <li>Supply Chain Assistant — €35k–55k</li>
-                        <li>University Admin — €32k–48k</li>
-                        <li>NGO Program Officer — €35k–55k</li>
-                        <li>Event Coordinator — €30k–45k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="scandinavia norway denmark sweden" data-roles="caretaker security hospitality government clerk flight attendant" data-tier="high">
-                    <h3>🇳🇴/🇩🇰/🇸🇪 Scandinavia</h3>
-                    <ul>
-                        <li>Hospitality Supervisor — €32k–50k</li>
-                        <li>Government Clerk — €35k–55k</li>
-                        <li>Flight Attendant — €40k–60k</li>
-                        <li>Caretaker / Security — €30k–45k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="france" data-roles="retail manager fashion luxury sales hospitality call center" data-tier="moderate">
-                    <h3>🇫🇷 France</h3>
-                    <ul>
-                        <li>Retail / Store Manager — €28k–45k</li>
-                        <li>Luxury Sales Advisor — €30k–55k</li>
-                        <li>Hotel & Tourism Supervisor — €30k–50k</li>
-                        <li>Call Center Support — €28k–40k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="middle east uae qatar saudi" data-roles="retail manager airport lounge tourism hospital admin" data-tier="emerging">
-                    <h3>🇦🇪 / 🇶🇦 / 🇸🇦 Middle East</h3>
-                    <ul>
-                        <li>Retail / Store Manager — $1.5k–3.5k/mo</li>
-                        <li>Airport Lounge Staff — $1.8k–3k/mo</li>
-                        <li>Tourism Admin — $1.5k–3.5k/mo</li>
-                        <li>Clinic Admin — $1.8k–3.5k/mo</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="africa morocco tunisia senegal" data-roles="ngo field officer retail supervisor factory supervisor tourism manager" data-tier="emerging">
-                    <h3>🌍 Africa (Select)</h3>
-                    <ul>
-                        <li>NGO Field Officer — $1.2k–3k/mo</li>
-                        <li>Retail Supervisor — $800–1.5k/mo</li>
-                        <li>Factory Supervisor — $1k–2k/mo</li>
-                        <li>Tourism & Hotel Manager — $1k–2.5k/mo</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="south africa" data-roles="retail manager hr admin call center bpo" data-tier="emerging">
-                    <h3>🇿🇦 South Africa</h3>
-                    <ul>
-                        <li>Retail Manager — $18k–30k</li>
-                        <li>HR / Office Admin — $15k–25k</li>
-                        <li>Call Center / BPO — $12k–20k</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="islands mauritius maldives seychelles" data-roles="hotel resort supervisor ngo education hospitality retail" data-tier="emerging">
-                    <h3>🏝️ Islands (Select)</h3>
-                    <ul>
-                        <li>Hotel / Resort Supervisor — $800–2.5k/mo</li>
-                        <li>NGO / Education Officer — $1k–2k/mo</li>
-                        <li>Hospitality Admin — $800–2k/mo</li>
-                        <li>Retail Supervisor — $700–1.5k/mo</li>
-                    </ul>
-                </div>
-                <div class="country-block" data-country="australia new zealand" data-roles="retail manager hospitality airport crew university admin" data-tier="moderate">
-                    <h3>🇦🇺 / 🇳🇿 Aus & NZ</h3>
-                    <ul>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">London premium</span></div>
+        </article>
+
+        <article class="country-card" data-tags="australia retail hospitality airport" data-kind="nontech">
+          <h3>🇦🇺 Australia</h3>
+          <ul>
                         <li>Retail Manager — A$60k–85k</li>
                         <li>Hotel Supervisor — A$55k–75k</li>
                         <li>Airport Ground Crew — A$50k–70k</li>
                         <li>University Admin — A$55k–80k</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    </main>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Moderate</span><span style="color:var(--muted);font-weight:700">City differences apply</span></div>
+        </article>
 
-    <footer class="footer-note">Explore more and chase your dreams! Salary ranges indicative (2025). Always research local conditions.
-        Made with ❤️ by Career Explorer for global learners.
-        <br />
-        Follow me on instaGram @zyra_elenor
-    </footer>
+        <article class="country-card" data-tags="middleeast retail tourism hospitality" data-kind="nontech">
+          <h3>🇦🇪 / 🇶🇦 / 🇸🇦 Middle East</h3>
+          <ul>
+                        <li>Retail / Store Manager — $1.5k–3.5k/mo</li>
+                        <li>Airport Lounge Staff — $1.8k–3k/mo</li>
+                        <li>Tourism Admin — $1.5k–3.5k/mo</li>
+                        <li>Clinic Admin — $1.8k–3.5k/mo</li>
+          </ul>
+          <div class="meta-row"><span class="pill">Tier: Emerging</span><span style="color:var(--muted);font-weight:700">Tax & benefits vary</span></div>
+        </article>
+        <!-- Add inside NON-TECH <div class="card-grid"> ... </div> -->
 
-    <button id="scrollTop" aria-label="Back to top" style="position:fixed;right:18px;bottom:22px;background:linear-gradient(120deg,#2563eb,#df2771);color:#fff;border:none;padding:12px 14px;border-radius:50%;display:none;cursor:pointer;box-shadow:0 6px 18px -6px rgba(0,0,0,.4);"><i class="ri-arrow-up-line"></i></button>
+<article class="country-card" 
+         data-tags="africa morocco tunisia senegal ngo field officer retail supervisor factory tourism manager" 
+         data-kind="nontech">
+  <h3>🌍 Africa (Select)</h3>
+  <ul>
+    <li>NGO Field Officer — $1.2k–3k/mo</li>
+    <li>Retail Supervisor — $800–1.5k/mo</li>
+    <li>Factory Supervisor — $1k–2k/mo</li>
+    <li>Tourism & Hotel Manager — $1k–2.5k/mo</li>
+  </ul>
+  <div class="meta-row">
+    <span class="pill">Tier: Emerging</span>
+    <span style="color:var(--muted);font-weight:700">North/West Africa sample</span>
+  </div>
+</article>
 
-    <script>
-        const searchInput=document.getElementById('searchBox');
-        const blocks=[...document.querySelectorAll('.country-block')];
-        const chips=[...document.querySelectorAll('.filter-btn')];
-        let activeFilter='all';
-        function applyFilters(){
-            const q=searchInput.value.trim().toLowerCase();
-            blocks.forEach(b=>{
-                const text=(b.dataset.country+" "+b.dataset.roles).toLowerCase();
-                const tier=b.dataset.tier;
-                const matchText=!q||text.includes(q);
-                const matchTier=activeFilter==='all'|| tier===activeFilter;
-                b.classList.toggle('hidden-filter', !(matchText && matchTier));
-            });
-        }
-        searchInput.addEventListener('input',applyFilters);
-        chips.forEach(c=>c.addEventListener('click',()=>{chips.forEach(x=>x.classList.remove('active')); c.classList.add('active'); activeFilter=c.dataset.filter; applyFilters();}));
+<article class="country-card" 
+         data-tags="south africa retail manager hr admin call center bpo" 
+         data-kind="nontech">
+  <h3>🇿🇦 South Africa</h3>
+  <ul>
+    <li>Retail Manager — $18k–30k</li>
+    <li>HR / Office Admin — $15k–25k</li>
+    <li>Call Center / BPO — $12k–20k</li>
+  </ul>
+  <div class="meta-row">
+    <span class="pill">Tier: Emerging</span>
+    <span style="color:var(--muted);font-weight:700">Urban vs rural gap high</span>
+  </div>
+</article>
 
-        // Reveal animations
-        const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}})},{threshold:.12});
-        document.querySelectorAll('.reveal').forEach(r=>observer.observe(r));
+<article class="country-card" 
+         data-tags="islands mauritius maldives seychelles hotel resort supervisor ngo education hospitality retail" 
+         data-kind="nontech">
+  <h3>🏝️ Islands (Select)</h3>
+  <ul>
+    <li>Hotel / Resort Supervisor — $800–2.5k/mo</li>
+    <li>NGO / Education Officer — $1k–2k/mo</li>
+    <li>Hospitality Admin — $800–2k/mo</li>
+    <li>Retail Supervisor — $700–1.5k/mo</li>
+  </ul>
+  <div class="meta-row">
+    <span class="pill">Tier: Emerging</span>
+    <span style="color:var(--muted);font-weight:700">Mauritius, Maldives, Seychelles</span>
+  </div>
+</article>
 
-        // Scrollspy nav
-        const navLinks=[...document.querySelectorAll('[data-nav]')];
-        const sections=[...document.querySelectorAll('[data-section]')];
-        window.addEventListener('scroll',()=>{
-            const y=window.scrollY+150; let current=null; sections.forEach(s=>{ if(s.offsetTop<=y && s.offsetTop+s.offsetHeight>y) current=s.id; });
-            navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href')==='#'+current));
-            // back to top visibility
-            document.getElementById('scrollTop').style.display=window.scrollY>500?'inline-flex':'none';
-        });
+      </div>
+    </section>
 
-        // Back to top
-        document.getElementById('scrollTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  </main>
 
-        // Dark mode toggle with persistence
-        const toggle=document.getElementById('toggleDark');
-        (function initTheme(){
-            const stored=localStorage.getItem('theme');
-            const prefers=window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const enableDark= stored? stored==='dark': prefers;
-            if(enableDark){ document.body.classList.add('dark'); const i=toggle.querySelector('i'); i.classList.replace('ri-moon-line','ri-sun-line'); toggle.setAttribute('aria-pressed','true'); toggle.querySelector('span').textContent='Light Mode'; }
-        })();
-        toggle.addEventListener('click',()=>{ const dark=document.body.classList.toggle('dark'); const ic=toggle.querySelector('i'); ic.classList.toggle('ri-sun-line',dark); ic.classList.toggle('ri-moon-line',!dark); toggle.setAttribute('aria-pressed',dark); toggle.querySelector('span').textContent=dark?'Light Mode':'Dark Mode'; localStorage.setItem('theme',dark?'dark':'light'); });
-    </script>
+  <footer>
+    Salary ranges indicative (2025). Always verify local conditions and licensing requirements. Made with purpose by ClassKarlo-Synapse
+  </footer>
+
+  <!-- Floating Donate button (update link) -->
+  <a href="https://rzp.io/rzp/DonateToFreeEducation" target="_blank"
+     style="position:fixed;right:20px;bottom:20px;background:#fff;border:2px solid #000;padding:10px 14px;border-radius:12px;font-weight:800;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,0.18);">
+    Donate
+  </a>
+
+  <script>
+    // Filtering + search (simple and robust)
+    const searchBox = document.getElementById('searchBox');
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    const cards = Array.from(document.querySelectorAll('.country-card'));
+
+    let activeFilter = 'all';
+
+    function normalize(s){ return (s||'').toString().toLowerCase(); }
+
+    function applyFilter(){
+      const q = normalize(searchBox.value.trim());
+      cards.forEach(card=>{
+        const kind = card.dataset.kind || '';
+        const tags = normalize(card.dataset.tags || '');
+        const matchesFilter = (activeFilter === 'all') || (kind === activeFilter);
+        const matchesQuery = !q || tags.includes(q) || normalize(card.querySelector('h3').textContent).includes(q);
+        card.style.display = (matchesFilter && matchesQuery) ? '' : 'none';
+      });
+    }
+
+    // chip click handlers
+    chips.forEach(c=>{
+      c.addEventListener('click', ()=>{
+        chips.forEach(x=>x.classList.remove('active'));
+        c.classList.add('active');
+        activeFilter = c.dataset.filter || 'all';
+        applyFilter();
+      });
+    });
+
+    searchBox.addEventListener('input', applyFilter);
+    // initial filter run
+    applyFilter();
+  </script>
 </body>
 </html>
