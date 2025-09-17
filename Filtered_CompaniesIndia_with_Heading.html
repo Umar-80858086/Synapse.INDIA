@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Salary Guide for Freshers - EC, Electrical & CS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .filters {
+            padding: 20px;
+            background: white;
+            border-bottom: 2px solid #eee;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .filter-group input, .filter-group select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group input:focus, .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        th:hover {
+            background: #34495e;
+        }
+
+        th::after {
+            content: ' ↕️';
+            font-size: 0.8em;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s ease;
+        }
+
+        tr:hover td {
+            background: #f8f9fa;
+        }
+
+        .company-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .salary {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 1.1em;
+        }
+
+        .field-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+            color: white;
+        }
+
+        .field-cs { background: #3498db; }
+        .field-electronics { background: #e74c3c; }
+        .field-electrical { background: #f39c12; }
+
+        .type-tag {
+            display: inline-block;
+            padding: 3px 6px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        .type-mnc { background: #8e44ad; color: white; }
+        .type-indian { background: #27ae60; color: white; }
+        .type-psu { background: #e67e22; color: white; }
+        .type-startup { background: #e74c3c; color: white; }
+
+        .location-list {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+            
+            table {
+                font-size: 0.85rem;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+            }
+        }
+
+        .export-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: #219a52;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Company Salary Guide for Freshers</h1>
+            <p>Complete guide for EC, Electrical Engineering & Computer Science graduates</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCompanies">200+</div>
+                <div class="stat-label">Total Companies</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgSalaryCS">8.2</div>
+                <div class="stat-label">Avg CS Salary (LPA)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgSalaryEE">5.4</div>
+                <div class="stat-label">Avg EE Salary (LPA)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgSalaryEC">6.1</div>
+                <div class="stat-label">Avg EC Salary (LPA)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="citiesCount">7</div>
+                <div class="stat-label">Cities Covered</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group search-input">
+                <label for="search">Search Companies</label>
+                <input type="text" id="search" placeholder="Search by company name...">
+            </div>
+            
+            <div class="filter-group">
+                <label for="fieldFilter">Field of Study</label>
+                <select id="fieldFilter">
+                    <option value="">All Fields</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Electrical Engineering">Electrical Engineering</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="cityFilter">City</label>
+                <select id="cityFilter">
+                    <option value="">All Cities</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Pune">Pune</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Noida">Noida</option>
+                    <option value="Ahmedabad">Ahmedabad</option>
+                    <option value="Vadodara">Vadodara</option>
+                    <option value="Gandhinagar">Gandhinagar</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="typeFilter">Company Type</label>
+                <select id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="MNC">MNC</option>
+                    <option value="Indian Company">Indian Company</option>
+                    <option value="PSU">PSU</option>
+                    <option value="Startup">Startup</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="salaryFilter">Min Salary (LPA)</label>
+                <select id="salaryFilter">
+                    <option value="">Any Salary</option>
+                    <option value="3">3+ LPA</option>
+                    <option value="5">5+ LPA</option>
+                    <option value="7">7+ LPA</option>
+                    <option value="10">10+ LPA</option>
+                    <option value="15">15+ LPA</option>
+                </select>
+            </div>
+            
+            <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+        </div>
+
+        <div class="table-container">
+            <table id="companyTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Company Name</th>
+                        <th onclick="sortTable(1)">Field</th>
+                        <th onclick="sortTable(2)">Avg Salary (LPA)</th>
+                        <th onclick="sortTable(3)">Locations</th>
+                        <th onclick="sortTable(4)">Type</th>
+                        <th onclick="sortTable(5)">Industry</th>
+                    </tr>
+                </thead>
+                <tbody id="companyTableBody">
+                </tbody>
+            </table>
+            <div id="noResults" class="no-results" style="display: none;">
+                No companies found matching your criteria.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const companies = [
+            {"name": "Tata Consultancy Services (TCS)", "field": "Computer Science", "avgSalary": "3.5", "location": ["Mumbai", "Pune", "Bangalore", "Noida", "Ahmedabad"], "type": "MNC", "industry": "IT Services"},
+            {"name": "Infosys", "field": "Computer Science", "avgSalary": "3.9", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Services"},
+            {"name": "Wipro", "field": "Computer Science", "avgSalary": "3.2", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Services"},
+            {"name": "HCL Technologies", "field": "Computer Science", "avgSalary": "2.8", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Services"},
+            {"name": "Tech Mahindra", "field": "Computer Science", "avgSalary": "3.3", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Services"},
+            {"name": "Capgemini", "field": "Computer Science", "avgSalary": "3.5", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Services"},
+            {"name": "IBM", "field": "Computer Science", "avgSalary": "4.5", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Services"},
+            {"name": "Accenture", "field": "Computer Science", "avgSalary": "4.2", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Consulting"},
+            {"name": "Cognizant", "field": "Computer Science", "avgSalary": "3.8", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Services"},
+            {"name": "DXC Technology", "field": "Computer Science", "avgSalary": "4.0", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "IT Services"},
+            {"name": "Microsoft", "field": "Computer Science", "avgSalary": "18.5", "location": ["Bangalore", "Noida"], "type": "MNC", "industry": "Software"},
+            {"name": "Amazon", "field": "Computer Science", "avgSalary": "16.8", "location": ["Mumbai", "Bangalore", "Pune"], "type": "MNC", "industry": "E-commerce & Cloud"},
+            {"name": "Google", "field": "Computer Science", "avgSalary": "22.5", "location": ["Mumbai", "Bangalore"], "type": "MNC", "industry": "Technology"},
+            {"name": "Adobe", "field": "Computer Science", "avgSalary": "15.2", "location": ["Bangalore", "Noida"], "type": "MNC", "industry": "Software"},
+            {"name": "Oracle", "field": "Computer Science", "avgSalary": "8.5", "location": ["Mumbai", "Bangalore", "Pune"], "type": "MNC", "industry": "Database Software"},
+            {"name": "SAP", "field": "Computer Science", "avgSalary": "9.2", "location": ["Mumbai", "Bangalore", "Pune"], "type": "MNC", "industry": "Enterprise Software"},
+            {"name": "Salesforce", "field": "Computer Science", "avgSalary": "12.8", "location": ["Mumbai", "Bangalore"], "type": "MNC", "industry": "CRM Software"},
+            {"name": "VMware", "field": "Computer Science", "avgSalary": "11.5", "location": ["Bangalore", "Pune"], "type": "MNC", "industry": "Cloud Software"},
+            {"name": "Cisco", "field": "Computer Science", "avgSalary": "10.8", "location": ["Bangalore", "Mumbai"], "type": "MNC", "industry": "Networking"},
+            {"name": "Dell Technologies", "field": "Computer Science", "avgSalary": "7.5", "location": ["Bangalore", "Mumbai"], "type": "MNC", "industry": "Technology"},
+            {"name": "Flipkart", "field": "Computer Science", "avgSalary": "12.0", "location": ["Bangalore"], "type": "Indian Company", "industry": "E-commerce"},
+            {"name": "Paytm", "field": "Computer Science", "avgSalary": "8.5", "location": ["Noida", "Mumbai"], "type": "Indian Company", "industry": "Fintech"},
+            {"name": "Zomato", "field": "Computer Science", "avgSalary": "10.2", "location": ["Noida", "Mumbai"], "type": "Indian Company", "industry": "Food Tech"},
+            {"name": "Ola", "field": "Computer Science", "avgSalary": "9.5", "location": ["Bangalore", "Mumbai"], "type": "Indian Company", "industry": "Mobility"},
+            {"name": "Swiggy", "field": "Computer Science", "avgSalary": "11.5", "location": ["Bangalore", "Mumbai"], "type": "Indian Company", "industry": "Food Delivery"},
+            {"name": "Byju's", "field": "Computer Science", "avgSalary": "7.8", "location": ["Bangalore", "Mumbai"], "type": "Indian Company", "industry": "EdTech"},
+            {"name": "PhonePe", "field": "Computer Science", "avgSalary": "14.2", "location": ["Bangalore"], "type": "Indian Company", "industry": "Fintech"},
+            {"name": "Razorpay", "field": "Computer Science", "avgSalary": "13.5", "location": ["Bangalore", "Mumbai"], "type": "Indian Company", "industry": "Fintech"},
+            {"name": "Freshworks", "field": "Computer Science", "avgSalary": "10.8", "location": ["Bangalore"], "type": "Indian Company", "industry": "SaaS"},
+            {"name": "Zerodha", "field": "Computer Science", "avgSalary": "15.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Fintech"},
+            {"name": "Infibeam", "field": "Computer Science", "avgSalary": "4.5", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "E-commerce"},
+            {"name": "EliteCore Technologies", "field": "Computer Science", "avgSalary": "4.2", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Telecom Software"},
+            {"name": "Cygnet Infotech", "field": "Computer Science", "avgSalary": "3.8", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Software Development"},
+            {"name": "iSummation Technologies", "field": "Computer Science", "avgSalary": "3.5", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Software Development"},
+            {"name": "Kalptaru InfoSoft", "field": "Computer Science", "avgSalary": "3.2", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "ERP Solutions"},
+            {"name": "Majolee InfoTech", "field": "Computer Science", "avgSalary": "3.0", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Web Development"},
+            {"name": "Creative Infotech", "field": "Computer Science", "avgSalary": "3.3", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Software Development"},
+            {"name": "Softwise Mechatronics", "field": "Computer Science", "avgSalary": "4.0", "location": ["Vadodara"], "type": "Indian Company", "industry": "Engineering Software"},
+            {"name": "Quest Global", "field": "Computer Science", "avgSalary": "5.5", "location": ["Vadodara"], "type": "Indian Company", "industry": "Engineering Services"},
+            {"name": "L&T Technology Services", "field": "Computer Science", "avgSalary": "5.8", "location": ["Vadodara", "Mumbai", "Pune"], "type": "Indian Company", "industry": "Engineering Services"},
+            {"name": "Mindtree", "field": "Computer Science", "avgSalary": "4.5", "location": ["Bangalore", "Mumbai"], "type": "MNC", "industry": "IT Services"},
+            {"name": "Mphasis", "field": "Computer Science", "avgSalary": "4.8", "location": ["Bangalore", "Mumbai"], "type": "MNC", "industry": "IT Services"},
+            {"name": "LTI", "field": "Computer Science", "avgSalary": "4.2", "location": ["Mumbai", "Bangalore"], "type": "MNC", "industry": "IT Services"},
+            {"name": "Hexaware", "field": "Computer Science", "avgSalary": "4.0", "location": ["Mumbai", "Bangalore"], "type": "Indian Company", "industry": "IT Services"},
+            {"name": "Cyient", "field": "Computer Science", "avgSalary": "4.3", "location": ["Bangalore"], "type": "Indian Company", "industry": "Engineering Services"},
+            {"name": "Persistent Systems", "field": "Computer Science", "avgSalary": "5.2", "location": ["Pune"], "type": "Indian Company", "industry": "Software Development"},
+            {"name": "Zensar Technologies", "field": "Computer Science", "avgSalary": "4.1", "location": ["Pune"], "type": "Indian Company", "industry": "IT Services"},
+            {"name": "KPIT", "field": "Computer Science", "avgSalary": "4.7", "location": ["Pune"], "type": "Indian Company", "industry": "Automotive Software"},
+            {"name": "Synechron", "field": "Computer Science", "avgSalary": "6.8", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Financial Technology"},
+            {"name": "Mastek", "field": "Computer Science", "avgSalary": "5.0", "location": ["Mumbai"], "type": "Indian Company", "industry": "IT Services"},
+            {"name": "Siemens", "field": "Electronics", "avgSalary": "5.5", "location": ["Mumbai", "Pune", "Bangalore"], "type": "MNC", "industry": "Industrial Automation"},
+            {"name": "Philips", "field": "Electronics", "avgSalary": "5.2", "location": ["Mumbai", "Pune", "Bangalore"], "type": "MNC", "industry": "Healthcare Technology"},
+            {"name": "Bosch", "field": "Electronics", "avgSalary": "6.8", "location": ["Mumbai", "Pune", "Bangalore"], "type": "MNC", "industry": "Automotive Technology"},
+            {"name": "Samsung R&D", "field": "Electronics", "avgSalary": "8.5", "location": ["Bangalore", "Noida"], "type": "MNC", "industry": "Consumer Electronics"},
+            {"name": "Intel", "field": "Electronics", "avgSalary": "12.5", "location": ["Bangalore"], "type": "MNC", "industry": "Semiconductor"},
+            {"name": "Qualcomm", "field": "Electronics", "avgSalary": "15.2", "location": ["Bangalore"], "type": "MNC", "industry": "Wireless Technology"},
+            {"name": "Texas Instruments", "field": "Electronics", "avgSalary": "10.5", "location": ["Bangalore"], "type": "MNC", "industry": "Semiconductor"},
+            {"name": "Analog Devices", "field": "Electronics", "avgSalary": "9.8", "location": ["Bangalore"], "type": "MNC", "industry": "Semiconductor"},
+            {"name": "Broadcom", "field": "Electronics", "avgSalary": "13.2", "location": ["Bangalore"], "type": "MNC", "industry": "Semiconductor"},
+            {"name": "Marvell", "field": "Electronics", "avgSalary": "11.8", "location": ["Bangalore"], "type": "MNC", "industry": "Semiconductor"},
+            {"name": "Bajaj Auto", "field": "Electronics", "avgSalary": "5.8", "location": ["Pune"], "type": "Indian Company", "industry": "Automotive"},
+            {"name": "Mahindra & Mahindra", "field": "Electronics", "avgSalary": "5.5", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Automotive"},
+            {"name": "Godrej", "field": "Electronics", "avgSalary": "4.8", "location": ["Mumbai"], "type": "Indian Company", "industry": "Consumer Electronics"},
+            {"name": "Tata Elxsi", "field": "Electronics", "avgSalary": "7.2", "location": ["Bangalore", "Pune"], "type": "Indian Company", "industry": "Design Services"},
+            {"name": "Wipro Engineering", "field": "Electronics", "avgSalary": "5.0", "location": ["Bangalore", "Pune"], "type": "Indian Company", "industry": "Engineering Services"},
+            {"name": "Mindteck", "field": "Electronics", "avgSalary": "4.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Electronics Design"},
+            {"name": "Sasken", "field": "Electronics", "avgSalary": "5.8", "location": ["Bangalore"], "type": "Indian Company", "industry": "Wireless Technology"},
+            {"name": "Mistral Solutions", "field": "Electronics", "avgSalary": "4.2", "location": ["Bangalore"], "type": "Indian Company", "industry": "Embedded Systems"},
+            {"name": "Centum Electronics", "field": "Electronics", "avgSalary": "6.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Defense Electronics"},
+            {"name": "Rolta", "field": "Electronics", "avgSalary": "4.8", "location": ["Mumbai"], "type": "Indian Company", "industry": "Geospatial Solutions"},
+            {"name": "Optimized Electrotech", "field": "Electronics", "avgSalary": "4.0", "location": ["Ahmedabad"], "type": "Startup", "industry": "Defense Electronics"},
+            {"name": "NEERX", "field": "Electronics", "avgSalary": "3.5", "location": ["Ahmedabad"], "type": "Startup", "industry": "AgTech IoT"},
+            {"name": "Photonics Watertech", "field": "Electronics", "avgSalary": "3.2", "location": ["Gandhinagar"], "type": "Indian Company", "industry": "LED & Solar"},
+            {"name": "Meril Life Sciences", "field": "Electronics", "avgSalary": "4.5", "location": ["Vadodara"], "type": "Indian Company", "industry": "Medical Devices"},
+            {"name": "Tata Electronics", "field": "Electronics", "avgSalary": "6.5", "location": ["Vadodara"], "type": "Indian Company", "industry": "Semiconductor"},
+            {"name": "Synchronics Electronics", "field": "Electronics", "avgSalary": "4.8", "location": ["Vadodara"], "type": "Indian Company", "industry": "Industrial Electronics"},
+            {"name": "Advanced Sys-tek", "field": "Electronics", "avgSalary": "4.2", "location": ["Vadodara"], "type": "Indian Company", "industry": "Testing Equipment"},
+            {"name": "Prima Equipment", "field": "Electronics", "avgSalary": "4.5", "location": ["Vadodara"], "type": "Indian Company", "industry": "Industrial Equipment"},
+            {"name": "Crompton Greaves", "field": "Electronics", "avgSalary": "4.0", "location": ["Vadodara"], "type": "Indian Company", "industry": "Electrical Equipment"},
+            {"name": "Lucy Electric", "field": "Electronics", "avgSalary": "5.0", "location": ["Vadodara"], "type": "MNC", "industry": "Power Distribution"},
+            {"name": "Honeywell", "field": "Electronics", "avgSalary": "7.5", "location": ["Mumbai", "Pune", "Bangalore"], "type": "MNC", "industry": "Industrial Technology"},
+            {"name": "Emerson", "field": "Electronics", "avgSalary": "6.8", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Automation Solutions"},
+            {"name": "Rockwell Automation", "field": "Electronics", "avgSalary": "8.2", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Industrial Automation"},
+            {"name": "Flextronics", "field": "Electronics", "avgSalary": "5.5", "location": ["Bangalore", "Pune"], "type": "MNC", "industry": "Electronics Manufacturing"},
+            {"name": "Jabil", "field": "Electronics", "avgSalary": "5.8", "location": ["Pune"], "type": "MNC", "industry": "Electronics Manufacturing"},
+            {"name": "Foxconn", "field": "Electronics", "avgSalary": "4.5", "location": ["Pune", "Bangalore"], "type": "MNC", "industry": "Electronics Manufacturing"},
+            {"name": "Dixon Technologies", "field": "Electronics", "avgSalary": "4.2", "location": ["Noida"], "type": "Indian Company", "industry": "Electronics Manufacturing"},
+            {"name": "Amber Enterprises", "field": "Electronics", "avgSalary": "3.8", "location": ["Noida"], "type": "Indian Company", "industry": "Consumer Durables"},
+            {"name": "Videocon", "field": "Electronics", "avgSalary": "3.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "Consumer Electronics"},
+            {"name": "Onida", "field": "Electronics", "avgSalary": "3.2", "location": ["Mumbai"], "type": "Indian Company", "industry": "Consumer Electronics"},
+            {"name": "BHEL", "field": "Electrical Engineering", "avgSalary": "8.5", "location": ["Mumbai", "Pune", "Bangalore"], "type": "PSU", "industry": "Power Equipment"},
+            {"name": "NTPC", "field": "Electrical Engineering", "avgSalary": "7.5", "location": ["Mumbai", "Pune", "Noida"], "type": "PSU", "industry": "Power Generation"},
+            {"name": "Power Grid Corporation", "field": "Electrical Engineering", "avgSalary": "7.8", "location": ["Mumbai", "Noida"], "type": "PSU", "industry": "Power Transmission"},
+            {"name": "NHPC", "field": "Electrical Engineering", "avgSalary": "7.2", "location": ["Mumbai"], "type": "PSU", "industry": "Hydro Power"},
+            {"name": "SJVN", "field": "Electrical Engineering", "avgSalary": "6.8", "location": ["Mumbai"], "type": "PSU", "industry": "Power Generation"},
+            {"name": "THDC", "field": "Electrical Engineering", "avgSalary": "6.5", "location": ["Noida"], "type": "PSU", "industry": "Hydro Power"},
+            {"name": "Larsen & Toubro (L&T)", "field": "Electrical Engineering", "avgSalary": "6.5", "location": ["Mumbai", "Pune", "Vadodara", "Ahmedabad"], "type": "MNC", "industry": "Engineering & Construction"},
+            {"name": "ABB", "field": "Electrical Engineering", "avgSalary": "5.2", "location": ["Mumbai", "Pune", "Vadodara"], "type": "MNC", "industry": "Power & Automation"},
+            {"name": "GE", "field": "Electrical Engineering", "avgSalary": "7.2", "location": ["Mumbai", "Bangalore"], "type": "MNC", "industry": "Industrial Technology"},
+            {"name": "Schneider Electric", "field": "Electrical Engineering", "avgSalary": "5.8", "location": ["Mumbai", "Pune", "Bangalore"], "type": "MNC", "industry": "Energy Management"},
+            {"name": "Siemens Energy", "field": "Electrical Engineering", "avgSalary": "6.8", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Energy Technology"},
+            {"name": "Hitachi Energy", "field": "Electrical Engineering", "avgSalary": "6.2", "location": ["Mumbai", "Bangalore"], "type": "MNC", "industry": "Power Systems"},
+            {"name": "Mitsubishi Electric", "field": "Electrical Engineering", "avgSalary": "5.5", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Electrical Equipment"},
+            {"name": "Eaton", "field": "Electrical Engineering", "avgSalary": "5.8", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Power Management"},
+            {"name": "Legrand", "field": "Electrical Engineering", "avgSalary": "4.5", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Electrical Installations"},
+            {"name": "CG Power", "field": "Electrical Engineering", "avgSalary": "5.0", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Power Equipment"},
+            {"name": "Tata Power", "field": "Electrical Engineering", "avgSalary": "5.8", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Power Generation"},
+            {"name": "Adani Power", "field": "Electrical Engineering", "avgSalary": "6.0", "location": ["Ahmedabad", "Mumbai"], "type": "Indian Company", "industry": "Power Generation"},
+            {"name": "Reliance Power", "field": "Electrical Engineering", "avgSalary": "5.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "Power Generation"},
+            {"name": "JSW Energy", "field": "Electrical Engineering", "avgSalary": "5.2", "location": ["Mumbai"], "type": "Indian Company", "industry": "Power Generation"},
+            {"name": "Torrent Power", "field": "Electrical Engineering", "avgSalary": "4.8", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Power Distribution"},
+            {"name": "Gujarat State Electricity Board", "field": "Electrical Engineering", "avgSalary": "4.5", "location": ["Ahmedabad", "Gandhinagar", "Vadodara"], "type": "PSU", "industry": "Power Distribution"},
+            {"name": "Maharashtra State Electricity Board", "field": "Electrical Engineering", "avgSalary": "4.2", "location": ["Mumbai", "Pune"], "type": "PSU", "industry": "Power Distribution"},
+            {"name": "Karnataka Power Corporation", "field": "Electrical Engineering", "avgSalary": "4.5", "location": ["Bangalore"], "type": "PSU", "industry": "Power Generation"},
+            {"name": "Bajaj Electricals", "field": "Electrical Engineering", "avgSalary": "3.8", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Electrical Equipment"},
+            {"name": "Havells", "field": "Electrical Engineering", "avgSalary": "4.2", "location": ["Mumbai", "Pune", "Noida"], "type": "Indian Company", "industry": "Electrical Equipment"},
+            {"name": "Crompton Consumer Electricals", "field": "Electrical Engineering", "avgSalary": "3.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "Consumer Electricals"},
+            {"name": "V-Guard", "field": "Electrical Engineering", "avgSalary": "3.8", "location": ["Mumbai"], "type": "Indian Company", "industry": "Electrical Appliances"},
+            {"name": "Orient Electric", "field": "Electrical Engineering", "avgSalary": "3.2", "location": ["Noida"], "type": "Indian Company", "industry": "Electrical Appliances"},
+            {"name": "Anchor Electricals", "field": "Electrical Engineering", "avgSalary": "3.0", "location": ["Mumbai"], "type": "Indian Company", "industry": "Electrical Accessories"},
+            {"name": "Finolex Cables", "field": "Electrical Engineering", "avgSalary": "3.5", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Cables"},
+            {"name": "Polycab", "field": "Electrical Engineering", "avgSalary": "4.0", "location": ["Mumbai"], "type": "Indian Company", "industry": "Cables & Wires"},
+            {"name": "KEI Industries", "field": "Electrical Engineering", "avgSalary": "3.8", "location": ["Noida"], "type": "Indian Company", "industry": "Cables"},
+            {"name": "RR Kabel", "field": "Electrical Engineering", "avgSalary": "3.2", "location": ["Mumbai"], "type": "Indian Company", "industry": "Cables"},
+            {"name": "Newen Systems", "field": "Electrical Engineering", "avgSalary": "5.5", "location": ["Vadodara"], "type": "Indian Company", "industry": "Power Conversion"},
+            {"name": "VIRBHU India", "field": "Electrical Engineering", "avgSalary": "5.2", "location": ["Vadodara"], "type": "Indian Company", "industry": "Power Electronics"},
+            {"name": "Aarvi Encon", "field": "Electrical Engineering", "avgSalary": "4.0", "location": ["Vadodara"], "type": "Indian Company", "industry": "Electrical Engineering"},
+            {"name": "COENZ GROUP", "field": "Electrical Engineering", "avgSalary": "4.5", "location": ["Vadodara"], "type": "Indian Company", "industry": "Electrical Design"},
+            {"name": "Agratas", "field": "Electrical Engineering", "avgSalary": "6.8", "location": ["Vadodara"], "type": "Indian Company", "industry": "Battery Technology"},
+            {"name": "Charms Agencies", "field": "Electrical Engineering", "avgSalary": "3.8", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Industrial Equipment"},
+            {"name": "NV SubPower", "field": "Electrical Engineering", "avgSalary": "4.2", "location": ["Vadodara"], "type": "Indian Company", "industry": "Power Systems"},
+            {"name": "EESRS Private Limited", "field": "Electrical Engineering", "avgSalary": "3.5", "location": ["Vadodara"], "type": "Indian Company", "industry": "Electrical Services"},
+            {"name": "Toshiba", "field": "Electrical Engineering", "avgSalary": "6.5", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Industrial Systems"},
+            {"name": "Yokogawa", "field": "Electrical Engineering", "avgSalary": "7.0", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Industrial Automation"},
+            {"name": "Danfoss", "field": "Electrical Engineering", "avgSalary": "5.5", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Engineering Solutions"},
+            {"name": "Atlas Copco", "field": "Electrical Engineering", "avgSalary": "6.2", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Industrial Equipment"},
+            {"name": "Kirloskar Electric", "field": "Electrical Engineering", "avgSalary": "4.5", "location": ["Pune"], "type": "Indian Company", "industry": "Electric Motors"},
+            {"name": "Mahindra Powerol", "field": "Electrical Engineering", "avgSalary": "4.8", "location": ["Mumbai"], "type": "Indian Company", "industry": "Gensets"},
+            {"name": "Cummins India", "field": "Electrical Engineering", "avgSalary": "6.2", "location": ["Pune"], "type": "MNC", "industry": "Power Solutions"},
+            {"name": "Greaves Power", "field": "Electrical Engineering", "avgSalary": "4.0", "location": ["Mumbai"], "type": "Indian Company", "industry": "Gensets"},
+            {"name": "Ashok Leyland", "field": "Electrical Engineering", "avgSalary": "4.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "Automotive Electrical"},
+            {"name": "Force Motors", "field": "Electrical Engineering", "avgSalary": "4.2", "location": ["Pune"], "type": "Indian Company", "industry": "Automotive"},
+            {"name": "Maruti Suzuki", "field": "Electronics", "avgSalary": "5.5", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Automotive"},
+            {"name": "Hyundai Motor", "field": "Electronics", "avgSalary": "5.8", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Automotive"},
+            {"name": "Honda Cars", "field": "Electronics", "avgSalary": "5.2", "location": ["Pune"], "type": "MNC", "industry": "Automotive"},
+            {"name": "Toyota", "field": "Electronics", "avgSalary": "6.0", "location": ["Bangalore"], "type": "MNC", "industry": "Automotive"},
+            {"name": "Ford India", "field": "Electronics", "avgSalary": "5.5", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Automotive"},
+            {"name": "Volkswagen", "field": "Electronics", "avgSalary": "5.8", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Automotive"},
+            {"name": "BMW India", "field": "Electronics", "avgSalary": "7.2", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Automotive"},
+            {"name": "Audi India", "field": "Electronics", "avgSalary": "7.5", "location": ["Mumbai"], "type": "MNC", "industry": "Automotive"},
+            {"name": "Mercedes-Benz", "field": "Electronics", "avgSalary": "7.8", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Automotive"},
+            {"name": "Jaguar Land Rover", "field": "Electronics", "avgSalary": "8.0", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Automotive"},
+            {"name": "HAL", "field": "Electronics", "avgSalary": "6.5", "location": ["Bangalore"], "type": "PSU", "industry": "Aerospace"},
+            {"name": "DRDO", "field": "Electronics", "avgSalary": "5.8", "location": ["Mumbai", "Pune", "Bangalore"], "type": "PSU", "industry": "Defense Research"},
+            {"name": "ISRO", "field": "Electronics", "avgSalary": "7.2", "location": ["Bangalore", "Mumbai"], "type": "PSU", "industry": "Space Research"},
+            {"name": "Tata Advanced Systems", "field": "Electronics", "avgSalary": "6.8", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Defense"},
+            {"name": "Mahindra Aerospace", "field": "Electronics", "avgSalary": "5.5", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Aerospace"},
+            {"name": "BEL", "field": "Electronics", "avgSalary": "5.2", "location": ["Bangalore"], "type": "PSU", "industry": "Defense Electronics"},
+            {"name": "BEML", "field": "Electrical Engineering", "avgSalary": "5.0", "location": ["Bangalore"], "type": "PSU", "industry": "Heavy Engineering"},
+            {"name": "Bharti Airtel", "field": "Computer Science", "avgSalary": "6.8", "location": ["Mumbai", "Noida"], "type": "Indian Company", "industry": "Telecom"},
+            {"name": "Reliance Jio", "field": "Computer Science", "avgSalary": "8.5", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Telecom"},
+            {"name": "Vodafone Idea", "field": "Computer Science", "avgSalary": "5.2", "location": ["Mumbai", "Pune"], "type": "MNC", "industry": "Telecom"},
+            {"name": "Nokia", "field": "Electronics", "avgSalary": "7.5", "location": ["Bangalore"], "type": "MNC", "industry": "Telecom Equipment"},
+            {"name": "Ericsson", "field": "Electronics", "avgSalary": "8.0", "location": ["Bangalore"], "type": "MNC", "industry": "Telecom Equipment"},
+            {"name": "Huawei", "field": "Electronics", "avgSalary": "6.8", "location": ["Bangalore"], "type": "MNC", "industry": "Telecom Equipment"},
+            {"name": "ZTE", "field": "Electronics", "avgSalary": "5.5", "location": ["Noida"], "type": "MNC", "industry": "Telecom Equipment"},
+            {"name": "State Bank of India - IT", "field": "Computer Science", "avgSalary": "4.5", "location": ["Mumbai", "Pune"], "type": "PSU", "industry": "Banking IT"},
+            {"name": "HDFC Bank - IT", "field": "Computer Science", "avgSalary": "5.8", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Banking IT"},
+            {"name": "ICICI Bank - IT", "field": "Computer Science", "avgSalary": "5.5", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Banking IT"},
+            {"name": "Axis Bank - IT", "field": "Computer Science", "avgSalary": "5.2", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Banking IT"},
+            {"name": "Kotak Mahindra Bank - IT", "field": "Computer Science", "avgSalary": "6.0", "location": ["Mumbai"], "type": "Indian Company", "industry": "Banking IT"},
+            {"name": "Yes Bank - IT", "field": "Computer Science", "avgSalary": "4.8", "location": ["Mumbai"], "type": "Indian Company", "industry": "Banking IT"},
+            {"name": "IndusInd Bank - IT", "field": "Computer Science", "avgSalary": "5.0", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Banking IT"},
+            {"name": "McKinsey & Company", "field": "Computer Science", "avgSalary": "25.0", "location": ["Mumbai"], "type": "MNC", "industry": "Management Consulting"},
+            {"name": "Boston Consulting Group", "field": "Computer Science", "avgSalary": "22.0", "location": ["Mumbai"], "type": "MNC", "industry": "Management Consulting"},
+            {"name": "Bain & Company", "field": "Computer Science", "avgSalary": "24.0", "location": ["Mumbai"], "type": "MNC", "industry": "Management Consulting"},
+            {"name": "Deloitte", "field": "Computer Science", "avgSalary": "6.5", "location": ["Mumbai", "Pune", "Bangalore", "Noida"], "type": "MNC", "industry": "Consulting"},
+            {"name": "PwC", "field": "Computer Science", "avgSalary": "5.8", "location": ["Mumbai", "Pune", "Bangalore"], "type": "MNC", "industry": "Consulting"},
+            {"name": "EY", "field": "Computer Science", "avgSalary": "6.0", "location": ["Mumbai", "Pune", "Bangalore"], "type": "MNC", "industry": "Consulting"},
+            {"name": "KPMG", "field": "Computer Science", "avgSalary": "5.5", "location": ["Mumbai", "Pune", "Bangalore"], "type": "MNC", "industry": "Consulting"},
+            {"name": "Disney Star", "field": "Computer Science", "avgSalary": "8.5", "location": ["Mumbai"], "type": "MNC", "industry": "Media"},
+            {"name": "Sony Pictures", "field": "Computer Science", "avgSalary": "7.2", "location": ["Mumbai"], "type": "MNC", "industry": "Media"},
+            {"name": "Zee Entertainment", "field": "Computer Science", "avgSalary": "5.8", "location": ["Mumbai"], "type": "Indian Company", "industry": "Media"},
+            {"name": "Times Network", "field": "Computer Science", "avgSalary": "5.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "Media"},
+            {"name": "Network18", "field": "Computer Science", "avgSalary": "5.0", "location": ["Mumbai"], "type": "Indian Company", "industry": "Media"},
+            {"name": "NDTV", "field": "Computer Science", "avgSalary": "4.5", "location": ["Noida"], "type": "Indian Company", "industry": "Media"},
+            {"name": "Aaj Tak", "field": "Computer Science", "avgSalary": "4.2", "location": ["Noida"], "type": "Indian Company", "industry": "Media"},
+            {"name": "Nykaa", "field": "Computer Science", "avgSalary": "8.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "E-commerce"},
+            {"name": "Myntra", "field": "Computer Science", "avgSalary": "10.2", "location": ["Bangalore"], "type": "Indian Company", "industry": "Fashion E-commerce"},
+            {"name": "Jabong", "field": "Computer Science", "avgSalary": "7.5", "location": ["Noida"], "type": "Indian Company", "industry": "Fashion E-commerce"},
+            {"name": "Snapdeal", "field": "Computer Science", "avgSalary": "6.8", "location": ["Noida"], "type": "Indian Company", "industry": "E-commerce"},
+            {"name": "ShopClues", "field": "Computer Science", "avgSalary": "5.5", "location": ["Noida"], "type": "Indian Company", "industry": "E-commerce"},
+            {"name": "BigBasket", "field": "Computer Science", "avgSalary": "7.2", "location": ["Bangalore"], "type": "Indian Company", "industry": "Grocery E-commerce"},
+            {"name": "Grofers", "field": "Computer Science", "avgSalary": "6.5", "location": ["Noida"], "type": "Indian Company", "industry": "Grocery E-commerce"},
+            {"name": "Blue Dart", "field": "Computer Science", "avgSalary": "4.5", "location": ["Mumbai"], "type": "MNC", "industry": "Logistics"},
+            {"name": "DTDC", "field": "Computer Science", "avgSalary": "3.8", "location": ["Mumbai"], "type": "Indian Company", "industry": "Logistics"},
+            {"name": "Gati", "field": "Computer Science", "avgSalary": "3.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "Logistics"},
+            {"name": "Delhivery", "field": "Computer Science", "avgSalary": "8.2", "location": ["Noida"], "type": "Indian Company", "industry": "Logistics"},
+            {"name": "Ecom Express", "field": "Computer Science", "avgSalary": "5.5", "location": ["Noida"], "type": "Indian Company", "industry": "Logistics"},
+            {"name": "Rivigo", "field": "Computer Science", "avgSalary": "7.8", "location": ["Noida"], "type": "Indian Company", "industry": "Logistics"},
+            {"name": "MakeMyTrip", "field": "Computer Science", "avgSalary": "8.5", "location": ["Noida"], "type": "Indian Company", "industry": "Travel Tech"},
+            {"name": "Cleartrip", "field": "Computer Science", "avgSalary": "7.2", "location": ["Mumbai"], "type": "Indian Company", "industry": "Travel Tech"},
+            {"name": "Yatra", "field": "Computer Science", "avgSalary": "6.0", "location": ["Noida"], "type": "Indian Company", "industry": "Travel Tech"},
+            {"name": "Goibibo", "field": "Computer Science", "avgSalary": "6.5", "location": ["Noida"], "type": "Indian Company", "industry": "Travel Tech"},
+            {"name": "EaseMyTrip", "field": "Computer Science", "avgSalary": "5.8", "location": ["Noida"], "type": "Indian Company", "industry": "Travel Tech"},
+            {"name": "OYO", "field": "Computer Science", "avgSalary": "6.8", "location": ["Noida"], "type": "Indian Company", "industry": "Hospitality Tech"},
+            {"name": "Housing.com", "field": "Computer Science", "avgSalary": "7.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "PropTech"},
+            {"name": "99acres", "field": "Computer Science", "avgSalary": "6.2", "location": ["Noida"], "type": "Indian Company", "industry": "PropTech"},
+            {"name": "MagicBricks", "field": "Computer Science", "avgSalary": "5.8", "location": ["Noida"], "type": "Indian Company", "industry": "PropTech"},
+            {"name": "PropTiger", "field": "Computer Science", "avgSalary": "6.0", "location": ["Mumbai"], "type": "Indian Company", "industry": "PropTech"},
+            {"name": "Commonfloor", "field": "Computer Science", "avgSalary": "5.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "PropTech"},
+            {"name": "Dream11", "field": "Computer Science", "avgSalary": "12.5", "location": ["Mumbai"], "type": "Indian Company", "industry": "Gaming"},
+            {"name": "MPL", "field": "Computer Science", "avgSalary": "10.8", "location": ["Bangalore"], "type": "Indian Company", "industry": "Gaming"},
+            {"name": "WinZO", "field": "Computer Science", "avgSalary": "9.5", "location": ["Noida"], "type": "Indian Company", "industry": "Gaming"},
+            {"name": "Nazara Technologies", "field": "Computer Science", "avgSalary": "8.2", "location": ["Mumbai"], "type": "Indian Company", "industry": "Gaming"},
+            {"name": "Octro", "field": "Computer Science", "avgSalary": "7.5", "location": ["Noida"], "type": "Indian Company", "industry": "Gaming"},
+            {"name": "Gujarat Gas", "field": "Computer Science", "avgSalary": "4.0", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Gas Distribution"},
+            {"name": "Petronet LNG", "field": "Computer Science", "avgSalary": "5.5", "location": ["Gandhinagar"], "type": "Indian Company", "industry": "LNG"},
+            {"name": "ONGC", "field": "Computer Science", "avgSalary": "6.5", "location": ["Vadodara"], "type": "PSU", "industry": "Oil & Gas"},
+            {"name": "IOCL", "field": "Computer Science", "avgSalary": "5.8", "location": ["Vadodara"], "type": "PSU", "industry": "Oil Refining"},
+            {"name": "GAIL", "field": "Computer Science", "avgSalary": "5.2", "location": ["Vadodara"], "type": "PSU", "industry": "Natural Gas"},
+            {"name": "Sun Pharma", "field": "Computer Science", "avgSalary": "4.5", "location": ["Vadodara"], "type": "Indian Company", "industry": "Pharmaceuticals"},
+            {"name": "Cadila Healthcare", "field": "Computer Science", "avgSalary": "4.2", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Pharmaceuticals"},
+            {"name": "Torrent Pharma", "field": "Computer Science", "avgSalary": "4.0", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Pharmaceuticals"},
+            {"name": "Intas Pharma", "field": "Computer Science", "avgSalary": "3.8", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Pharmaceuticals"},
+            {"name": "Amneal Pharma", "field": "Computer Science", "avgSalary": "4.5", "location": ["Ahmedabad"], "type": "MNC", "industry": "Pharmaceuticals"},
+            {"name": "Zydus Cadila", "field": "Computer Science", "avgSalary": "4.2", "location": ["Ahmedabad"], "type": "Indian Company", "industry": "Pharmaceuticals"},
+            {"name": "Lupin", "field": "Computer Science", "avgSalary": "5.0", "location": ["Mumbai"], "type": "MNC", "industry": "Pharmaceuticals"},
+            {"name": "Dr. Reddy's Laboratories", "field": "Computer Science", "avgSalary": "5.5", "location": ["Hyderabad"], "type": "MNC", "industry": "Pharmaceuticals"},
+            {"name": "Cipla", "field": "Computer Science", "avgSalary": "5.2", "location": ["Mumbai"], "type": "MNC", "industry": "Pharmaceuticals"},
+            {"name": "Biocon", "field": "Computer Science", "avgSalary": "6.0", "location": ["Bangalore"], "type": "Indian Company", "industry": "Biotechnology"},
+            {"name": "Syngene International", "field": "Computer Science", "avgSalary": "5.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Biotechnology"},
+            {"name": "Glenmark Pharmaceuticals", "field": "Computer Science", "avgSalary": "4.8", "location": ["Mumbai"], "type": "MNC", "industry": "Pharmaceuticals"},
+            {"name": "Aurobindo Pharma", "field": "Computer Science", "avgSalary": "4.5", "location": ["Hyderabad"], "type": "Indian Company", "industry": "Pharmaceuticals"},
+            {"name": "Alembic Pharmaceuticals", "field": "Computer Science", "avgSalary": "4.2", "location": ["Vadodara"],"type":  "Indian Company","industry":"Pharmaceuticals"},
+            {"name": "Cadence Design Systems", "field": "Computer Science", "avgSalary": "15.0", "location": ["Bangalore"], "type": "MNC", "industry": "EDA"},
+            {"name": "Synopsys", "field": "Computer Science", "avgSalary": "14.5", "location": ["Bangalore"], "type": "MNC", "industry": "EDA"},
+            {"name": "Mentor Graphics", "field": "Computer Science", "avgSalary": "13.5", "location": ["Bangalore"], "type": "MNC", "industry": "EDA"},
+            {"name": "Ansys", "field": "Computer Science", "avgSalary": "12.0", "location": ["Bangalore"], "type": "MNC", "industry": "Simulation Software"},
+            {"name": "MathWorks", "field": "Computer Science", "avgSalary": "11.5", "location": ["Bangalore"], "type": "MNC", "industry": "Mathematical Computing"},
+            {"name": "Altair Engineering", "field": "Computer Science", "avgSalary": "10.8", "location": ["Bangalore"],"type":"MNC","industry":"Engineering Software"},
+            {"name": "Siemens EDA", "field": "Computer Science", "avgSalary": "12.5", "location": ["Bangalore"], "type": "MNC", "industry": "EDA"},
+            {"name": "Tata Elxsi", "field": "Computer Science", "avgSalary": "9.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Product Engineering"},
+            {"name": "L&T Technology Services", "field": "Computer Science", "avgSalary": "8.5", "location": ["Mumbai", "Pune"], "type": "Indian Company", "industry": "Engineering Services"},
+            {"name": "Cyient", "field": "Computer Science", "avgSalary": "7.8", "location": ["Hyderabad"], "type": "Indian Company", "industry": "Engineering Services"},
+            {"name": "KPIT Technologies", "field": "Computer Science", "avgSalary": "7.5", "location": ["Pune"],"type":"Indian Company","industry":"Engineering Services"},
+            {"name": "Birlasoft","field":"Computer Science","avgSalary":"6.5","location":["Noida"],"type":"Indian Company","industry":"IT Services"},
+            {"name":"Mphasis","field":"Computer Science","avgSalary":"7.2","location":["Bangalore"],"type":"MNC","industry":"IT Services"},
+            {"name":"Hexaware Technologies","field":"Computer Science","avgSalary":"6.8","location":["Mumbai"],"type":"Indian Company","industry":"IT Services"},
+            {"name":"Zensar Technologies","field":"Computer Science","avgSalary":"6.0","location":["Pune"],"type":"Indian Company","industry":"IT Services"},
+            {"name":"NIIT Technologies","field":"Computer Science","avgSalary":"7.0","location":["Noida"],"type":"Indian Company","industry":"IT Services"},
+            {"name":"Persistent Systems","field":"Computer Science","avgSalary":"8.0","location":["Pune"],"type":"Indian Company","industry":"Software Services"},
+            {"name":"Sonata Software","field":"Computer Science","avgSalary":"7.5","location":["Bangalore"],"type":"Indian Company","industry":"Software Services"},
+            {"name":"L&T Infotech","field":"Computer Science","avgSalary":"8.2","location":["Mumbai"],"type":"Indian Company","industry":"IT Services"},
+            {"name":"Syntel","field":"Computer Science","avgSalary":"7.8","location":["Mumbai"],"type":"MNC","industry":"IT Services"},
+            {"name":"Cognizant Technology Solutions","field":"Computer Science","avgSalary":"9.0","location":["Mumbai", "Pune", "Bangalore", "Noida"],"type":"MNC","industry":"IT Services"},
+            {"name":"Accenture","field":"Computer Science","avgSalary":"10.5","location":["Mumbai", "Pune", "Bangalore", "Noida"],"type":"MNC","industry":"IT Services"},
+            {"name":"Tata Consultancy Services (TCS)","field":"Computer Science","avgSalary":"9.5","location":["Mumbai", "Pune", "Bangalore", "Noida"],"type":"Indian Company","industry":"IT Services"},
+            {"name":"Infosys","field":"Computer Science","avgSalary":"10.0","location":["Mumbai", "Pune", "Bangalore", "Noida"],"type":"Indian Company","industry":"IT Services"},
+            {"name":"Wipro","field":"Computer Science","avgSalary":"9.0","location":["Mumbai", "Pune", "Bangalore", "Noida"],"type":"Indian Company","industry":"IT Services"},
+            {"name":"HCL Technologies","field":"Computer Science","avgSalary":"9.5","location":["Noida", "Chandigarh"],"type":"Indian Company","industry":"IT Services"},
+             {"name": "Good Move Logistics", "field": "Computer Science", "avgSalary": "4.0", "location": ["Chennai"], "type": "Startup", "industry": "Logistics Tech"},
+  {"name": "OrbitAID Aerospace", "field": "Computer Science", "avgSalary": "5.5", "location": ["Chennai"], "type": "Startup", "industry": "Space Tech"},
+  {"name": "Disprz", "field": "Computer Science", "avgSalary": "5.0", "location": ["Chennai"], "type": "Startup", "industry": "EdTech / SaaS"},
+  {"name": "Garuda Aerospace", "field": "Computer Science", "avgSalary": "5.5", "location": ["Chennai"], "type": "Startup", "industry": "Drone Tech"},
+  {"name": "Kaleidofin", "field": "Computer Science", "avgSalary": "5.0", "location": ["Chennai"], "type": "Startup", "industry": "FinTech"},
+  {"name": "Planys Technologies", "field": "Computer Science", "avgSalary": "6.0", "location": ["Chennai"], "type": "Startup", "industry": "Underwater Robotics"},
+  {"name": "GoBumpr", "field": "Computer Science", "avgSalary": "4.5", "location": ["Chennai"], "type": "Startup", "industry": "AutoTech"},
+  {"name": "Wysa", "field": "Computer Science", "avgSalary": "5.0", "location": ["Chennai"], "type": "Startup", "industry": "Mental Health Tech"},
+
+  {"name": "Interval Learning", "field": "Computer Science", "avgSalary": "4.0", "location": ["Kerala"], "type": "Startup", "industry": "EdTech"},
+  {"name": "Entri", "field": "Computer Science", "avgSalary": "4.5", "location": ["Kerala"], "type": "Startup", "industry": "EdTech"},
+  {"name": "Genrobotics", "field": "Computer Science", "avgSalary": "5.5", "location": ["Kerala"], "type": "Startup", "industry": "Agri Robotics"},
+  {"name": "Nava Design & Innovation", "field": "Computer Science", "avgSalary": "5.0", "location": ["Kerala"], "type": "Startup", "industry": "Agri Robotics"},
+  {"name": "Dr Jackfruit", "field": "Computer Science", "avgSalary": "4.0", "location": ["Kerala"], "type": "Startup", "industry": "FoodTech"},
+  {"name": "Sastra Robotics", "field": "Computer Science", "avgSalary": "6.0", "location": ["Kerala"], "type": "Startup", "industry": "Robotics"},
+  {"name": "Agrima Infotech", "field": "Computer Science", "avgSalary": "5.5", "location": ["Kerala"], "type": "Startup", "industry": "AI / FoodTech"},
+  {"name": "Fuselage Innovations", "field": "Computer Science", "avgSalary": "4.5", "location": ["Kerala"], "type": "Startup", "industry": "AgriTech"},
+  {"name": "Qudrat", "field": "Computer Science", "avgSalary": "4.0", "location": ["Kerala"], "type": "Startup", "industry": "Social / EdTech"},
+
+  {"name": "Annapurna Microfinance", "field": "Computer Science", "avgSalary": "4.5", "location": ["Bhubaneswar"], "type": "Startup", "industry": "FinTech"},
+  {"name": "LectureNotes", "field": "Computer Science", "avgSalary": "4.0", "location": ["Bhubaneswar"], "type": "Startup", "industry": "EdTech"},
+  {"name": "Milk Mantra", "field": "Computer Science", "avgSalary": "3.8", "location": ["Bhubaneswar"], "type": "Local Company", "industry": "Food / Dairy"},
+  {"name": "Ig-drones", "field": "Computer Science", "avgSalary": "5.5", "location": ["Bhubaneswar"], "type": "Startup", "industry": "Drone Tech"},
+  {"name": "Bookingjini", "field": "Computer Science", "avgSalary": "4.5", "location": ["Bhubaneswar"], "type": "Startup", "industry": "Hospitality Tech"},
+  {"name": "Fydo", "field": "Computer Science", "avgSalary": "3.5", "location": ["Bhubaneswar"], "type": "Startup", "industry": "Unknown"},
+  {"name": "Muvi", "field": "Computer Science", "avgSalary": "5.0", "location": ["Bhubaneswar"], "type": "Startup", "industry": "Video Tech"},
+
+  {"name": "FreshToHome", "field": "Computer Science", "avgSalary": "4.8", "location": ["Kerala / Thiruvananthapuram"], "type": "Startup", "industry": "Food E-commerce"},
+  {"name": "iD Fresh Food", "field": "Computer Science", "avgSalary": "4.5", "location": ["Kerala / Wayanad"], "type": "Startup", "industry": "FoodTech"},
+  {"name": "CareStack", "field": "Computer Science", "avgSalary": "5.5", "location": ["Kerala / Thiruvananthapuram"], "type": "Startup", "industry": "Dental Tech"},
+  {"name": "WayCool Foods", "field": "Computer Science", "avgSalary": "4.8", "location": ["Kerala / Kochi"], "type": "Startup", "industry": "AgriTech"},
+  {"name": "Ather Energy", "field": "Electronics", "avgSalary": "6.0", "location": ["Chennai"], "type": "Startup", "industry": "Electric Vehicles"},
+  {"name": "Rivian", "field": "Electronics", "avgSalary": "7.0", "location": ["Pune"], "type": "MNC", "industry": "Electric Vehicles"},
+  {"name": "Ola Electric", "field": "Electronics", "avgSalary": "6.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Electric Vehicles"},
+  {"name": "Tork Motors", "field": "Electronics", "avgSalary": "5.8", "location": ["Pune"], "type": "Startup", "industry": "Electric Vehicles"},
+  {"name": "Ultraviolette Automotive", "field": "Electronics", "avgSalary": "6.2", "location": ["Bangalore"], "type": "Startup", "industry": "Electric Vehicles"},
+  {"name": "Ampere Vehicles", "field": "Electronics", "avgSalary": "5.5", "location": ["Coimbatore"],"type":"Indian Company","industry":"Electric Vehicles"},
+            {"name": "Axiom Energy Solutions", "field": "Electronics", "avgSalary": "5.0", "location": ["Chennai"], "type": "Startup", "industry": "Electric Vehicles"},
+            {"name": "Exicom Tele-Systems", "field": "Electronics", "avgSalary": "5.2", "location": ["Gurgaon"], "type": "Indian Company", "industry": "Electric Vehicle Charging"},
+            {"name": "Magenta Power", "field": "Electronics", "avgSalary": "5.0", "location": ["Gurgaon"], "type": "Startup", "industry": "Electric Vehicle Charging"},
+            {"name": "Charge+Zone", "field": "Electronics", "avgSalary": "5.2", "location": ["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name": "Triton Electric Vehicle Chargers", "field": "Electronics", "avgSalary": "5.0", "location": ["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name": "Volttic", "field": "Electronics", "avgSalary": "4.8", "location": ["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name": "Ather Energy", "field": "Electronics", "avgSalary": "6.0", "location": ["Chennai"], "type": "Startup", "industry": "Electric Vehicles"},
+            {"name": "Rivian", "field": "Electronics", "avgSalary": "7.0", "location": ["Pune"], "type": "MNC", "industry": "Electric Vehicles"},
+            {"name": "Ola Electric", "field": "Electronics", "avgSalary": "6.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Electric Vehicles"},
+            {"name": "Tork Motors", "field": "Electronics", "avgSalary": "5.8", "location": ["Pune"], "type": "Startup", "industry": "Electric Vehicles"},
+            {"name": "Ultraviolette Automotive", "field": "Electronics", "avgSalary": "6.2", "location": ["Bangalore"], "type": "Startup", "industry": "Electric Vehicles"},
+            {"name": "Ampere Vehicles", "field": "Electronics", "avgSalary": "5.5", "location": ["Coimbatore"],"type":"Indian Company","industry":"Electric Vehicles"},
+            {"name": "Axiom Energy Solutions", "field": "Electronics", "avgSalary": "5.0", "location": ["Chennai"], "type": "Startup", "industry": "Electric Vehicles"},
+            {"name": "Exicom Tele-Systems", "field": "Electronics", "avgSalary": "5.2", "location": ["Gurgaon"],"type":"Indian Company","industry":"Electric Vehicle Charging"},
+            {"name":"Magenta Power","field":"Electronics","avgSalary":"5.0","location":["Gurgaon"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Charge+Zone","field":"Electronics","avgSalary":"5.2","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Triton Electric Vehicle Chargers","field":"Electronics","avgSalary":"5.0","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Volttic","field":"Electronics","avgSalary":"4.8","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name": "Ather Energy", "field": "Electronics", "avgSalary": "6.0", "location": ["Chennai"], "type": "Startup", "industry": "Electric Vehicles"},
+            {"name": "Rivian", "field": "Electronics", "avgSalary": "7.0", "location": ["Pune"], "type": "MNC", "industry": "Electric Vehicles"},
+            {"name": "Ola Electric", "field": "Electronics", "avgSalary": "6.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Electric Vehicles"},
+            {"name": "Tork Motors", "field": "Electronics", "avgSalary": "5.8", "location": ["Pune"], "type": "Startup", "industry": "Electric Vehicles"},
+            {"name": "Ultraviolette Automotive", "field": "Electronics", "avgSalary": "6.2", "location": ["Bangalore"],"type":"Startup","industry":"Electric Vehicles"},
+            {"name": "Ampere Vehicles","field":"Electronics","avgSalary":"5.5","location":["Coimbatore"],"type":"Indian Company","industry":"Electric Vehicles"},
+            {"name":"Axiom Energy Solutions","field":"Electronics","avgSalary":"5.0","location":["Chennai"],"type":"Startup","industry":"Electric Vehicles"},
+            {"name":"Exicom Tele-Systems","field":"Electronics","avgSalary":"5.2","location":["Gurgaon"],"type":"Indian Company","industry":"Electric Vehicle Charging"},
+            {"name":"Magenta Power","field":"Electronics","avgSalary":"5.0","location":["Gurgaon"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Charge+Zone","field":"Electronics","avgSalary":"5.2","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Triton Electric Vehicle Chargers","field":"Electronics","avgSalary":"5.0","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Volttic","field":"Electronics","avgSalary":"4.8","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name": "Ather Energy", "field": "Electronics", "avgSalary": "6.0", "location": ["Chennai"], "type": "Startup", "industry": "Electric Vehicles"},
+            {"name": "Rivian", "field": "Electronics", "avgSalary": "7.0", "location": ["Pune"], "type": "MNC", "industry": "Electric Vehicles"},
+            {"name": "Ola Electric", "field": "Electronics", "avgSalary": "6.5", "location": ["Bangalore"], "type": "Indian Company", "industry": "Electric Vehicles"},
+            {"name": "Tork Motors", "field": "Electronics", "avgSalary": "5.8", "location": ["Pune"],"type":"Startup","industry":"Electric Vehicles"},
+            {"name":"Ultraviolette Automotive","field":"Electronics","avgSalary":"6.2","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicles"},
+            {"name":"Ampere Vehicles","field":"Electronics","avgSalary":"5.5","location":["Coimbatore"],"type":"Indian Company","industry":"Electric Vehicles"},
+            {"name":"Axiom Energy Solutions","field":"Electronics","avgSalary":"5.0","location":["Chennai"],"type":"Startup","industry":"Electric Vehicles"},
+            {"name":"Exicom Tele-Systems","field":"Electronics","avgSalary":"5.2","location":["Gurgaon"],"type":"Indian Company","industry":"Electric Vehicle Charging"},
+            {"name":"Magenta Power","field":"Electronics","avgSalary":"5.0","location":["Gurgaon"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Charge+Zone","field":"Electronics","avgSalary":"5.2","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Triton Electric Vehicle Chargers","field":"Electronics","avgSalary":"5.0","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+            {"name":"Volttic","field":"Electronics","avgSalary":"4.8","location":["Bangalore"],"type":"Startup","industry":"Electric Vehicle Charging"},
+   
+
+];
+
+        let filteredCompanies = [...companies];
+        let currentSort = { column: null, direction: 'asc' };
+
+        function renderTable(companies) {
+            const tbody = document.getElementById('companyTableBody');
+            const noResults = document.getElementById('noResults');
+            
+            if (companies.length === 0) {
+                tbody.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            tbody.innerHTML = companies.map(company => {
+                const fieldClass = company.field.replace(/[^a-zA-Z]/g, '').toLowerCase();
+                const typeClass = company.type.toLowerCase().replace(/[^a-zA-Z]/g, '');
+                
+                return `
+                    <tr>
+                        <td class="company-name">${company.name}</td>
+                        <td><span class="field-tag field-${fieldClass}">${company.field}</span></td>
+                        <td class="salary">₹${company.avgSalary} LPA</td>
+                        <td class="location-list">${company.location.join(', ')}</td>
+                        <td><span class="type-tag type-${typeClass}">${company.type}</span></td>
+                        <td>${company.industry}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterCompanies() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const field = document.getElementById('fieldFilter').value;
+            const city = document.getElementById('cityFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            const minSalary = parseFloat(document.getElementById('salaryFilter').value) || 0;
+
+            filteredCompanies = companies.filter(company => {
+                const matchesSearch = company.name.toLowerCase().includes(search) ||
+                                    company.industry.toLowerCase().includes(search);
+                const matchesField = !field || company.field === field;
+                const matchesCity = !city || company.location.includes(city);
+                const matchesType = !type || company.type === type;
+                const matchesSalary = parseFloat(company.avgSalary) >= minSalary;
+
+                return matchesSearch && matchesField && matchesCity && matchesType && matchesSalary;
+            });
+
+            renderTable(filteredCompanies);
+            updateStats();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'field', 'avgSalary', 'location', 'type', 'industry'];
+            const column = columns[columnIndex];
+            
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+
+            filteredCompanies.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+
+                if (column === 'avgSalary') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 'location') {
+                    aVal = aVal.join(', ');
+                    bVal = bVal.join(', ');
+                } else if (typeof aVal === 'string') {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+
+                if (aVal < bVal) return currentSort.direction === 'asc' ? -1 : 1;
+                if (aVal > bVal) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderTable(filteredCompanies);
+        }
+
+        function updateStats() {
+            document.getElementById('totalCompanies').textContent = filteredCompanies.length;
+            
+            const csCompanies = filteredCompanies.filter(c => c.field === 'Computer Science');
+            const eeCompanies = filteredCompanies.filter(c => c.field === 'Electrical Engineering');
+            const ecCompanies = filteredCompanies.filter(c => c.field === 'Electronics');
+            
+            const avgCS = csCompanies.length > 0 ? 
+                (csCompanies.reduce((sum, c) => sum + parseFloat(c.avgSalary), 0) / csCompanies.length).toFixed(1) : '0';
+            const avgEE = eeCompanies.length > 0 ? 
+                (eeCompanies.reduce((sum, c) => sum + parseFloat(c.avgSalary), 0) / eeCompanies.length).toFixed(1) : '0';
+            const avgEC = ecCompanies.length > 0 ? 
+                (ecCompanies.reduce((sum, c) => sum + parseFloat(c.avgSalary), 0) / ecCompanies.length).toFixed(1) : '0';
+            
+            document.getElementById('avgSalaryCS').textContent = avgCS;
+            document.getElementById('avgSalaryEE').textContent = avgEE;
+            document.getElementById('avgSalaryEC').textContent = avgEC;
+        }
+
+        function exportToCSV() {
+            const csv = [
+                ['Company Name', 'Field', 'Avg Salary (LPA)', 'Locations', 'Type', 'Industry'],
+                ...filteredCompanies.map(company => [
+                    company.name,
+                    company.field,
+                    company.avgSalary,
+                    company.location.join(', '),
+                    company.type,
+                    company.industry
+                ])
+            ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'company_salary_data.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        // Event listeners
+        document.getElementById('search').addEventListener('input', filterCompanies);
+        document.getElementById('fieldFilter').addEventListener('change', filterCompanies);
+        document.getElementById('cityFilter').addEventListener('change', filterCompanies);
+        document.getElementById('typeFilter').addEventListener('change', filterCompanies);
+        document.getElementById('salaryFilter').addEventListener('change', filterCompanies);
+
+        // Initial render
+        renderTable(companies);
+        updateStats();
+    </script>
+</body>
+</html>

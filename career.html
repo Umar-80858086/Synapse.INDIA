@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Career Path - Synapse</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Guided career pathways by budget: low, medium and high investment options with roles, skills, certifications and gender representation insights." />
+	<link rel="shortcut icon" type="image/png" href="images/icon/favicon.png" />
+	<link rel="stylesheet" href="style.css" />
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css" />
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="script.js"></script>
+	<style>
+		body.career-page {overflow-x:hidden; background:#fff; font-family:'Open Sans',sans-serif;}
+		/* Override global 90vh header height from main stylesheet for this page */
+		body.career-page header {height:auto !important; min-height:unset;}
+		.animated-bg {position:fixed; inset:0; background:radial-gradient(circle at 15% 25%,#ffe2f4 0%,rgba(255,255,255,0) 55%),radial-gradient(circle at 85% 70%,#e0f2ff 0%,rgba(255,255,255,0) 55%),linear-gradient(115deg,#ffffff 0%,#f5f9ff 100%); z-index:-2; animation:bgShift 22s linear infinite;}@keyframes bgShift{0%{filter:hue-rotate(0deg);}50%{filter:hue-rotate(30deg);}100%{filter:hue-rotate(0deg);}}
+		.career-anchor-bar {position:fixed; top:90px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,.85); backdrop-filter:blur(8px); padding:10px 24px; display:flex; gap:20px; border-radius:60px; box-shadow:0 8px 30px -12px rgba(0,0,0,.18); z-index:1200;}
+		.career-anchor-bar a {display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; text-decoration:none; color:#333; padding:8px 16px; border-radius:40px; transition:.35s;}
+		.career-anchor-bar a:hover,.career-anchor-bar a.active-anchor {background:#DF2771; color:#fff;}
+		/* Reduced top spacing (was 240px) to remove large initial gap */
+		.hero {margin-top:160px; display:flex; flex-wrap:wrap; justify-content:space-around; align-items:center; padding:0 40px;}
+		.hero-text {max-width:560px;} .hero-text h1{font-size:48px; line-height:1.05; margin:0;} .hero-text p{margin-top:18px; line-height:1.5; color:#444;}
+		.badge-row {margin-top:20px; display:flex; flex-wrap:wrap; gap:10px;}
+		.mini-badge {background:#fff; border:1px solid #eee; padding:6px 14px; font-size:11px; letter-spacing:.5px; border-radius:30px; font-weight:600; display:flex; align-items:center; gap:6px; box-shadow:0 2px 6px -3px rgba(0,0,0,.15);} .mini-badge i{font-size:14px; color:#DF2771;}
+		.section-block {padding:40px 7% 80px;} .section-block h2.section-title{font-size:42px; text-align:center; margin:0 0 10px;}
+		.section-lead {max-width:1000px; margin:0 auto 30px; text-align:center; font-size:17px; line-height:1.55; color:#333;}
+		.career-card-grid {display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); margin-top:32px;}
+		.career-card {position:relative; background:#fff; border:1px solid #f0f0f5; border-radius:18px; padding:20px 18px 22px; box-shadow:0 4px 18px -8px rgba(0,0,0,.15); overflow:hidden; transition:.45s; isolation:isolate;}
+		.career-card:before {content:""; position:absolute; inset:0; background:linear-gradient(130deg,#FA4B37,#DF2771); opacity:0; transition:.45s; z-index:-1;}
+		.career-card:hover {transform:translateY(-8px); box-shadow:0 18px 38px -14px rgba(0,0,0,.35);} .career-card:hover:before {opacity:.08;}
+		.career-card i {font-size:34px; line-height:1; margin-bottom:10px; background:linear-gradient(120deg,#FA4B37,#DF2771); -webkit-background-clip:text; background-clip:text; color:transparent;}
+		.career-card h3 {margin:0 0 6px; font-size:16px; letter-spacing:.4px;}
+		.career-card p {margin:0; font-size:13px; line-height:1.42; color:#444;}
+		.tag {display:inline-block; margin-top:8px; font-size:10.5px; letter-spacing:.6px; font-weight:600; padding:4px 9px; border-radius:30px; background:#fff4f8; color:#DF2771; border:1px solid #ffc8dd;}
+		.tag.blue {background:#e9f3ff; color:#0657b3; border-color:#c2e2ff;} .tag.gold{background:#fff5db; color:#b77400; border-color:#ffe1a3;} .tag.green{background:#e8fcec; color:#0d6c3a; border-color:#bff5cf;} .tag.purple{background:#f1e9ff; color:#5a2ca0; border-color:#dcc9ff;}
+		.cluster {display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;}
+		.resource-link {margin-top:26px;}
+		.resource-link a {text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:8px; background:#DF2771; color:#fff; padding:12px 22px; border-radius:50px; font-size:14px; box-shadow:0 6px 20px -8px rgba(223,39,113,.55); transition:.35s;}
+		.resource-link a:hover {background:#c22064;}
+		.divider-wave {height:70px; background:linear-gradient(to bottom,rgba(255,255,255,0),#ffffff);} 
+		.fade-in {opacity:0; transform:translateY(30px); animation:slideIn .9s ease forwards;} .fade-in.delay-1{animation-delay:.15s;} .fade-in.delay-2{animation-delay:.3s;} .fade-in.delay-3{animation-delay:.45s;}
+		@keyframes slideIn {to {opacity:1; transform:translateY(0);}}
+		/* anchor highlight script helper */
+		@media (max-width:900px){ .career-anchor-bar{flex-wrap:wrap; row-gap:6px;} .hero{margin-top:200px; padding:0 24px;} .hero-text h1{font-size:38px;} }
+
+		.donation-bubble {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+}
+.donation-bubble img {
+    width: 40px;
+    height: 40px;
+}
+	</style>
+	<script>
+		$(function(){
+			const sections=['#low','#medium','#high','#gender'];
+			const map={low:'#low_budget',medium:'#medium_budget',high:'#high_budget',gender:'#gender_considerations'};
+			$(window).on('scroll',()=>{
+				let scrollPos=$(window).scrollTop()+140;
+				$('.career-anchor-bar a').removeClass('active-anchor');
+				Object.values(map).forEach(id=>{const o=$(id); if(o.length){if(o.offset().top<=scrollPos && o.offset().top+o.height()>scrollPos){
+					$(`.career-anchor-bar a[href='#${id.replace('#','')}']`).addClass('active-anchor');
+				}}});
+			});
+		});
+	</script>
+</head>
+<body class="career-page">
+	<div class="animated-bg" aria-hidden="true"></div>
+	<div class="career-anchor-bar">
+		<a href="#low_budget"><i class="ri-leaf-line"></i><span>Low</span></a>
+		<a href="#medium_budget"><i class="ri-compass-3-line"></i><span>Medium</span></a>
+		<a href="#high_budget"><i class="ri-rocket-2-line"></i><span>High</span></a>
+		<a href="#gender_considerations"><i class="ri-group-line"></i><span>Gender</span></a>
+	</div>
+
+	<header id="header">
+		<nav>
+			<div class="logo"><img src="images/icon/logo.png" alt="logo" /></div>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a class="active" href="career.html">Career</a></li>
+				<li><a href="index.html#subbb">Subjects</a></li>
+				<li><a href="pathway.html">Career Pathways</a></li>
+				<li><a href="Filtered_CompaniesIndia_with_Heading.html" target="_blank">Top MNCs</a></li>
+				<li><a href="subjects/books.html" target="_blank">Buy Books At Cheap Rates</a></li>
+			</ul>
+			<div class="srch"><input type="text" class="search" placeholder="Search here..." /><img src="images/icon/search.png" alt="search" onclick="slide()" /></div>
+			<a class="get-started" href="login.html">Get Set GO</a>
+			<img src="images/icon/menu.png" class="menu" onclick="sideMenu(0)" alt="menu" />
+		</nav>
+	</header>
+
+	<section class="hero">
+		<div class="hero-text fade-in">
+			<h1>Choose Your Career Path Wisely</h1>
+			<p>Compare career options by budget level. Start lean, scale smart, or invest deep—each track lists actionable roles, focus skills and progression ideas so you can move from learning to earning.</p>
+			<div class="badge-row">
+				<span class="mini-badge"><i class="ri-flashlight-line"></i>FAST START</span>
+				<span class="mini-badge"><i class="ri-compass-3-line"></i>GUIDED GROWTH</span>
+				<span class="mini-badge"><i class="ri-rocket-2-line"></i>ADVANCED TRACK</span>
+				<span class="mini-badge"><i class="ri-group-line"></i>INCLUSION</span>
+			</div>
+		</div>
+		<div class="svg-image fade-in delay-1">
+			<img src="images/extra/svg1.jpg" alt="Illustration" />
+		</div>
+	</section>
+
+	<!-- Low Budget -->
+	<section id="low_budget" class="section-block fade-in">
+		<h2 class="section-title">Careers for Lower Budgets</h2>
+		<p class="section-lead">Start with minimal financial investment. Emphasize free resources, community practice and portfolio evidence. Monetize early via gigs, volunteering outcomes, or micro-services.</p>
+		<div class="career-card-grid">
+			<div class="career-card"><i class="ri-hand-heart-line"></i><h3>Social Work</h3><p>NGO & community support initiatives.<span class="tag">Non-Tech</span></p></div>
+			<div class="career-card"><i class="ri-restaurant-line"></i><h3>Culinary Arts</h3><p>Home bakery / cloud kitchen setup.<span class="tag">Creative</span></p></div>
+			<div class="career-card"><i class="ri-hotel-line"></i><h3>Hospitality Frontline</h3><p>Guest relations & service basics.<span class="tag">Service</span></p></div>
+			<div class="career-card"><i class="ri-tools-line"></i><h3>Plumbing Tech</h3><p>Essential maintenance & repair.<span class="tag green">Skilled</span></p></div>
+			<div class="career-card"><i class="ri-flashlight-line"></i><h3>Electrical Helper</h3><p>Residential wiring & solar intro.<span class="tag blue">Technical</span></p></div>
+			<div class="career-card"><i class="ri-car-line"></i><h3>Auto Mechanic</h3><p>EV transition & servicing basics.<span class="tag">Skilled</span></p></div>
+			<div class="career-card"><i class="ri-global-line"></i><h3>Content Writing</h3><p>Blogs & SEO snippets freelancing.<span class="tag purple">Digital</span></p></div>
+			<div class="career-card"><i class="ri-share-forward-line"></i><h3>Social Media Assistant</h3><p>Basic post scheduling & analytics.<span class="tag">Digital</span></p></div>
+		</div>
+		<div class="resource-link"><a href="subjects/computer_courses.html"><i class="ri-external-link-line"></i> Free / Low Cost Coding Resources</a></div>
+	</section>
+
+	<!-- Medium Budget -->
+	<section id="medium_budget" class="section-block fade-in delay-1">
+		<h2 class="section-title">Careers for Medium Budgets</h2>
+		<p class="section-lead">Invest modestly in structured diplomas, nano‑degrees or certification paths. Combine mentorship + projects + credentials for faster credibility and mid‑tier salary access.</p>
+		<div class="career-card-grid">
+			<div class="career-card"><i class="ri-palette-line"></i><h3>Graphic Design</h3><p>Brand kits & marketing creatives.<span class="tag purple">Creative</span></p></div>
+			<div class="career-card"><i class="ri-nurse-line"></i><h3>Nursing (Entry)</h3><p>Clinical support & patient care.<span class="tag green">Healthcare</span></p></div>
+			<div class="career-card"><i class="ri-code-box-line"></i><h3>Web Development</h3><p>Frontend / MERN / JAMStack builds.<span class="tag blue">Technology</span></p></div>
+			<div class="career-card"><i class="ri-store-2-line"></i><h3>Digital Marketing</h3><p>Funnels, SEO & analytics dashboards.<span class="tag">Business</span></p></div>
+			<div class="career-card"><i class="ri-cloud-line"></i><h3>Cloud Support</h3><p>AWS / Azure foundational ops.<span class="tag blue">IT</span></p></div>
+			<div class="career-card"><i class="ri-shield-keyhole-line"></i><h3>Cybersecurity Jr</h3><p>Vulnerability basics & SOC.<span class="tag">Security</span></p></div>
+			<div class="career-card"><i class="ri-database-2-line"></i><h3>Data Analyst</h3><p>Spreadsheets, SQL & dashboards.<span class="tag blue">Analytics</span></p></div>
+			<div class="career-card"><i class="ri-brush-4-line"></i><h3>UI / UX Assistant</h3><p>Wireframes & usability audits.<span class="tag purple">Design</span></p></div>
+		</div>
+		<div class="resource-link"><a href="subjects/ece.html"><i class="ri-external-link-line"></i> Explore Engineering & ECE Tracks</a></div>
+	</section>
+
+	<!-- High Budget -->
+	<section id="high_budget" class="section-block fade-in delay-2">
+		<h2 class="section-title">Careers for Higher Budgets</h2>
+		<p class="section-lead">Long‑horizon, capital intensive education unlocking regulated professions, leadership acceleration and research / innovation pathways. Optimize via scholarships & early internships.</p>
+		<div class="career-card-grid">
+			<div class="career-card"><i class="ri-building-2-line"></i><h3>Engineering</h3><p>Core + emerging tech systems.<span class="tag gold">STEM</span></p></div>
+			<div class="career-card"><i class="ri-stethoscope-line"></i><h3>Medicine</h3><p>Clinical practice & residency.<span class="tag green">Medical</span></p></div>
+			<div class="career-card"><i class="ri-briefcase-4-line"></i><h3>Business Management</h3><p>Strategy, finance & operations.<span class="tag gold">Mgmt</span></p></div>
+			<div class="career-card"><i class="ri-terminal-box-line"></i><h3>Software Engineering</h3><p>Product / platform architecture.<span class="tag blue">Tech</span></p></div>
+			<div class="career-card"><i class="ri-brain-line"></i><h3>AI / ML Research</h3><p>Model dev & applied science.<span class="tag purple">R&D</span></p></div>
+			<div class="career-card"><i class="ri-microscope-line"></i><h3>Biotech</h3><p>Genomics & therapeutic design.<span class="tag green">LifeSci</span></p></div>
+			<div class="career-card"><i class="ri-earth-line"></i><h3>Global Policy</h3><p>International development roles.<span class="tag gold">Policy</span></p></div>
+			<div class="career-card"><i class="ri-seedling-line"></i><h3>Entrepreneurship</h3><p>Startup building & innovation.<span class="tag">Venture</span></p></div>
+		</div>
+		<div class="resource-link"><a href="subjects/neet.html"><i class="ri-external-link-line"></i> Medical & Allied Pathways</a></div>
+	</section>
+
+	<!-- Gender Considerations -->
+	<section id="gender_considerations" class="section-block fade-in delay-3">
+		<h2 class="section-title">Gender Considerations in Careers</h2>
+		<p class="section-lead">Representation gaps are shifting. Entering an underrepresented field can unlock mentorship grants, diversity hiring tracks and faster visibility. Choose based on interest + aptitude, not labels.</p>
+		<div class="career-card-grid">
+			<div class="career-card"><i class="ri-truck-line"></i><h3>Construction</h3><p>Project & site management.<span class="tag gold">Male-dom.</span></p></div>
+			<div class="career-card"><i class="ri-nurse-line"></i><h3>Nursing</h3><p>Patient-centric clinical care.<span class="tag green">Female-dom.</span></p></div>
+			<div class="career-card"><i class="ri-book-open-line"></i><h3>Teaching</h3><p>Education & learner growth.<span class="tag purple">Female-dom.</span></p></div>
+			<div class="career-card"><i class="ri-shield-keyhole-line"></i><h3>Information Security</h3><p>Protecting systems & data.<span class="tag blue">Male-dom.</span></p></div>
+		</div>
+		<div class="resource-link"><a href="#low_budget"><i class="ri-arrow-up-line"></i> Back to Top</a></div>
+	</section>
+
+	<div class="divider-wave"></div>
+
+	<footer>
+		<div class="footer-container">
+			<div class="left-col">
+				<img src="images/icon/logo - Copy.png" style="width:200px;" alt="logo alt" />
+				<div class="logo"></div>
+				<div class="social-media">
+					<a href="#"><img src="images/icon/fb.png" alt="fb" /></a>
+					<a href="#"><img src="images/icon/insta.png" alt="insta" /></a>
+					<a href="#"><img src="images/icon/tt.png" alt="x" /></a>
+					<a href="https://www.youtube.com/channel/UCwnPSF_JozM6qt4gm57gLww" target="_blank"><img src="images/icon/ytube.png" alt="yt" /></a>
+					<a href="https://www.linkedin.com/in/umar-shaikh-825b2a310/" target="_blank"><img src="images/icon/linkedin.png" alt="linkedin" /></a>
+				</div><br /><br />
+				<p class="rights-text">Copyright © 2024 Created By Umar Shaikh. All Rights Reserved.</p>
+				<br />
+				<p><img src="images/icon/location.png" alt="loc" /> GEC Bharuch <br />Gujarat-392001</p><br />
+				<p><img src="images/icon/phone.png" alt="phone" /> +91-1234-567-890<br /><img src="images/icon/mail.png" alt="mail" />&nbsp; learnedonline9419@gmail.com</p>
+			</div>
+			<div class="right-col">
+				<h1 style="color:#fff">Our Newsletter</h1>
+				<div class="border"></div><br />
+				<p>Enter Your Email to get our News and updates.</p>
+				<form class="newsletter-form">
+					<input class="txtb" type="email" placeholder="Enter Your Email" />
+					<input class="btn" type="submit" value="Submit" />
+				</form>
+			</div>
+		</div>
+	</footer>
+
+	<a href="https://rzp.io/rzp/DonateToFreeEducation" class="donation-bubble" target="_blank">
+    <img src="images/donation-icon.png" alt="Donate">
+</a>
+</body>
+</html>
