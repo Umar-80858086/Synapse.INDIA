@@ -66,6 +66,30 @@
     width: 40px;
     height: 40px;
 }
+		/* Mobile Navigation Styles */
+    @media (max-width: 768px) {
+        nav ul {
+            display: none;
+            flex-direction: column;
+            background-color: #fff;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        nav ul.active {
+            display: flex;
+        }
+
+        nav .menu {
+            display: block;
+            cursor: pointer;
+        }
+    }
 	</style>
 	<script>
 		$(function(){
@@ -79,6 +103,15 @@
 				}}});
 			});
 		});
+		// JavaScript for Mobile Navigation Toggle
+    function sideMenu(toggle) {
+        const navMenu = document.querySelector('nav ul');
+        if (toggle) {
+            navMenu.classList.add('active');
+        } else {
+            navMenu.classList.remove('active');
+        }
+    }
 	</script>
 </head>
 <body class="career-page">
