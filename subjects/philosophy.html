@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="png" href="../images/icon/favicon.png">
+	<title>Philosophy</title>
+	<link rel="stylesheet" type="text/css" href="subjects.css">
+	<script type="text/javascript" src="../script.js"></script>
+</head>
+<body>
+	<script>
+		window.watsonAssistantChatOptions = {
+		  integrationID: "c9441638-233d-4d49-80b7-1d8a58b31037", // The ID of this integration.
+		  region: "us-south", // The region your integration is hosted in.
+		  serviceInstanceID: "00c400b1-8517-4478-8114-57df6827b91f", // The ID of your service instance.
+		  onLoad: async (instance) => { await instance.render(); }
+		};
+		setTimeout(function(){
+		  const t=document.createElement('script');
+		  t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+		  document.head.appendChild(t);
+		});
+	  </script>
+
+	<!-- NAVIGATION -->
+	<header>
+		<div class="nav" id="nav">
+			<div id="learned-logo">
+			<a href="../index.html"><img src="../images/icon/logo.png" style="width: 120px;"></a></div>
+			<div class="switch-tab" id="switch-tab" onclick="switchTAB()"><img src="../images/icon/menu.png"></div>
+			<ul id="list-switch">
+				<li><a href="#"><img src="../images/courses/d1.png" class="icon">JEE</a></li>
+				<li><a href="gate.html"><img src="../images/courses/paper.png" class="icon">GATE</a></li>
+				<li><a href="computer_courses.html"><img src="../images/courses/computer.png" class="icon">Computer Courses</a></li>
+				<!-- 	<li><a href="computer_courses.html#data"><img src="../images/courses/data.png" class="icon">Data Structures</a></li>
+				<li><a href="computer_courses.html#algo"><img src="../images/courses/algo.png" class="icon">Algorithm</a></li>
+				<li><a href="computer_courses.html#projects"><img src="../images/courses/projects.png" class="icon">Projects</a></li>-->
+			</ul>
+			<div class="search" id="search-switch">
+				<input type="text" placeholder="Search" class="srch"><button id="srchbtn"><img src="../images/icon/search.png"></button>
+			</div>
+		</div>
+	</header>
+
+	<div class="title">
+		<span>Philosophy<br>on Synapse</span>
+		<div class="shortdesc">
+			<p>Philosophy is a systematic study of general and fundamental questions concerning topics like existence, reason, knowledge, value, mind, and language. <br>It involves rational and critical inquiry that reflects on its own methods and assumptions12.<br> Philosophy deals with basic questions and problems related to reality, truth, existence, logic, and morality </p>
+		</div>
+	</div>
+
+<!-- Quick Links -->
+	<div class="course">
+		<div class="cbox">
+		<div class="det"><a href="https://en.wikipedia.org/wiki/Projectile" target="_blank">Criticle thinking</a></div>
+		<div class="det"><a href="https://en.wikipedia.org/wiki/Snell%27s_law" target="_blank">Happiness</a></div>
+		<div class="det"><a href="https://en.wikipedia.org/wiki/Light" target="_blank">Value theory</a></div>
+		<div class="det"><a href="https://en.wikipedia.org/wiki/Maxwell%27s_equations" target="_blank">Bio-Ethics</a></div>
+
+		<!--div class="det"><a href="https://en.wikipedia.org/wiki/Inertia" target="_blank">Cognitive Development</a></div>
+		<div class="det"><a href="https://en.wikipedia.org/wiki/Current" target="_blank">Metacognitiont</a></div-->
+		</div>
+		<div class="cbox">
+		<div class="det"><a href="#organic">History Of Philosophy</a></div>
+		<div class="det"><a href="https://en.wikipedia.org/wiki/Thermodynamics" target="_blank">Emerging Technologies</a></div>
+		<div class="det"><a href="https://en.wikipedia.org/wiki/Laser" target="_blank">Metaphysics</a></div>
+		<div class="det"><a href="https://en.wikipedia.org/wiki/Laser" target="_blank">Neurophilosophy</a></div>
+		</div>
+		<div class="cbox">
+			<div class="det"><a href="#organic">Punishment</a></div>
+			<div class="det"><a href="https://en.wikipedia.org/wiki/Thermodynamics" target="_blank">Epistemology</a></div>
+			<div class="det"><a href="https://en.wikipedia.org/wiki/Laser" target="_blank">Democracy</a></div>
+			</div>
+	</div>
+
+	<div class="inbt">
+		Boost your knowledge by Philosophy
+	</div>
+
+<!-- COURSES AVAILABLE -->
+	<div class="ccard">
+	<center>
+		<div class="ccardbox">
+			<div class="dcard">
+				<div class="fpart"><img src="../images/courses/valuetheory.jpeg"></div>
+				<a href="#organic"><div class="spart">value Theory<img src="../images/icon/dropdown.png"></div></a>
+			</div>
+			<div class="dcard">
+				<div class="fpart"><img src="../images/courses/bioethics.png"></div>
+				<a href="#inorganic"><div class="spart">Bio Bio-Ethics <img src="../images/icon/dropdown.png"></div></a>
+			</div>
+			<div class="dcard">
+				<div class="fpart"><img src="../images/courses/emergingtech.jpeg"></div>
+				<a href="#physical"><div class="spart">Emerging Technologies<img src="../images/icon/dropdown.png"></div></a>
+			</div>
+		</div>
+		<div class="ccardbox">
+			<div class="dcard">
+				<div class="fpart"><img src="../images/courses/metaphysics.jpg"></div>
+				<a href="#physics"><div class="spart">Metaphysics<img src="../images/icon/dropdown.png"></div></a>
+			</div>
+			<div class="dcard">
+				<div class="fpart"><img src="../images/courses/estimology.jpeg"></div>
+				<a href="#math"><div class="spart">Estimology<img src="../images/icon/dropdown.png"></div></a>
+			</div>
+			<div class="dcard">
+				<div class="fpart"><img src="../images/courses/democracy.jpeg"></div>
+				<a href="#sample_papers"><div class="spart">Democracy <img src="../images/icon/dropdown.png"></div></a>
+			</div>
+		</div>
+	</center>
+	</div>
+
+<!-- VIDEOS SECTION -->
+	<div class="title2" id="organic">
+		<span>Organic Chemistry</span>
+		<div class="shortdesc2">
+			<p>Make strong concepts in Organic Chemistry with great tutors...</p>
+		</div>
+	</div>
+	
+	<center>
+		<div class="ccardbox2">
+			<div class="dcard2"><span class="tag" >1/8</span>
+				<div class="fpart2"><img src="../images/courses/organic.jpg">
+					<iframe src="https://www.youtube.com/embed/bSMx0NS0XfY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >2/8</span>
+				<div class="fpart2"><img src="../images/courses/organic.jpg">
+					<iframe src="https://www.youtube.com/embed/bSMx0NS0XfY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >3/8</span>
+				<div class="fpart2"><img src="../images/courses/organic.jpg">
+					<iframe src="https://www.youtube.com/embed/bSMx0NS0XfY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >4/8</span>
+				<div class="fpart2"><img src="../images/courses/organic.jpg">
+					<iframe src="https://www.youtube.com/embed/bSMx0NS0XfY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+		
+			<div class="dcard2"><span class="tag" >5/8</span>
+				<div class="fpart2"><img src="../images/courses/organic.jpg">
+					<iframe src="https://www.youtube.com/embed/bSMx0NS0XfY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >6/8</span>
+				<div class="fpart2"><img src="../images/courses/organic.jpg">
+					<iframe src="https://www.youtube.com/embed/bSMx0NS0XfY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >7/8</span>
+				<div class="fpart2"><img src="../images/courses/organic.jpg">
+					<iframe src="https://www.youtube.com/embed/bSMx0NS0XfY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >8/8</span>
+				<div class="fpart2"><img src="../images/courses/organic.jpg">
+					<iframe src="https://www.youtube.com/embed/bSMx0NS0XfY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+		</div>
+	</center>
+
+<br><br>
+	<div class="click-me">
+		<a href="https://www.youtube.com/watch?v=bSMx0NS0XfY&list=PL8dPuuaLjXtONguuhLdVmq0HTKS0jksS4" target="_blank">Click Here to Watch full playlist</a>
+	</div>
+
+<!-- VIDEOS SECTION -->
+
+	<div class="title2" id="inorganic">
+		<span>Inorganic Chemistry</span>
+		<div class="shortdesc2">
+			<p>Make your strong concepts in Inorganic Chemistry...</p>
+		</div>
+	</div>
+	<center>
+		<div class="ccardbox2">
+			<div class="dcard2"><span class="tag" >1/8</span>
+				<div class="fpart2"><img src="../images/courses/inorganic.jpg">
+					<iframe src="https://www.youtube.com/embed/2B8CRyfGLo4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >2/8</span>
+				<div class="fpart2"><img src="../images/courses/inorganic.jpg">
+					<iframe src="https://www.youtube.com/embed/2B8CRyfGLo4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >3/8</span>
+				<div class="fpart2"><img src="../images/courses/inorganic.jpg">
+					<iframe src="https://www.youtube.com/embed/2B8CRyfGLo4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >4/8</span>
+				<div class="fpart2"><img src="../images/courses/inorganic.jpg">
+					<iframe src="https://www.youtube.com/embed/2B8CRyfGLo4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+		
+			<div class="dcard2"><span class="tag" >5/8</span>
+				<div class="fpart2"><img src="../images/courses/inorganic.jpg">
+					<iframe src="https://www.youtube.com/embed/2B8CRyfGLo4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >6/8</span>
+				<div class="fpart2"><img src="../images/courses/inorganic.jpg">
+					<iframe src="https://www.youtube.com/embed/2B8CRyfGLo4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >7/8</span>
+				<div class="fpart2"><img src="../images/courses/inorganic.jpg">
+					<iframe src="https://www.youtube.com/embed/2B8CRyfGLo4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >8/8</span>
+				<div class="fpart2"><img src="../images/courses/inorganic.jpg">
+					<iframe src="https://www.youtube.com/embed/Iuo9PpGE04Y" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+		</div>
+	</center>
+<br><br>
+	<div class="click-me">
+		<a href="https://www.youtube.com/watch?v=2B8CRyfGLo4" target="_blank">Click Here to Watch full playlist</a>
+	</div>
+
+<!-- VIDEOS SECTION -->
+
+	<div class="title2" id="physical">
+		<span>Physical Chemistry</span>
+		<div class="shortdesc2">
+			<p>Make your strong concepts in Physical Chemistry...</p>
+		</div>
+	</div>
+	<center>
+		<div class="ccardbox2">
+			<div class="dcard2"><span class="tag" >1/8</span>
+				<div class="fpart2"><img src="../images/courses/physical.jpg">
+					<iframe src="https://www.youtube.com/embed/2y4cf47I21A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >2/8</span>
+				<div class="fpart2"><img src="../images/courses/physical.jpg">
+					<iframe src="https://www.youtube.com/embed/2y4cf47I21A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >3/8</span>
+				<div class="fpart2"><img src="../images/courses/physical.jpg">
+					<iframe src="https://www.youtube.com/embed/2y4cf47I21A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >4/8</span>
+				<div class="fpart2"><img src="../images/courses/physical.jpg">
+					<iframe src="https://www.youtube.com/embed/2y4cf47I21A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+		
+			<div class="dcard2"><span class="tag" >5/8</span>
+				<div class="fpart2"><img src="../images/courses/physical.jpg">
+					<iframe src="https://www.youtube.com/embed/2y4cf47I21A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >6/8</span>
+				<div class="fpart2"><img src="../images/courses/physical.jpg">
+					<iframe src="https://www.youtube.com/embed/2y4cf47I21A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >7/8</span>
+				<div class="fpart2"><img src="../images/courses/physical.jpg">
+					<iframe src="https://www.youtube.com/embed/2y4cf47I21A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >8/8</span>
+				<div class="fpart2"><img src="../images/courses/physical.jpg">
+					<iframe src="https://www.youtube.com/embed/2y4cf47I21A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+		</div>
+	</center>
+<br><br>
+	<div class="click-me">
+		<a href="https://youtu.be/2y4cf47I21A" target="_blank">Click Here to Watch full playlist</a>
+	</div>
+
+
+<!-- VIDEOS SECTION -->
+
+	<div class="title2" id="physics">
+		<span>Physics</span>
+		<div class="shortdesc2">
+			<p>Do you think Physics is hard? It's not join this lectures...</p>
+		</div>
+	</div>
+	<center>
+		<div class="ccardbox2">
+			<div class="dcard2"><span class="tag" >1/8</span>
+				<div class="fpart2"><img src="../images/courses/physics.jpg">
+					<iframe src="https://www.youtube.com/embed/FYE0YYuAyu0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >2/8</span>
+				<div class="fpart2"><img src="../images/courses/physics.jpg">
+					<iframe src="https://www.youtube.com/embed/FYE0YYuAyu0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >3/8</span>
+				<div class="fpart2"><img src="../images/courses/physics.jpg">
+					<iframe src="https://www.youtube.com/embed/FYE0YYuAyu0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >4/8</span>
+				<div class="fpart2"><img src="../images/courses/physics.jpg">
+					<iframe src="https://www.youtube.com/embed/FYE0YYuAyu0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+		
+			<div class="dcard2"><span class="tag" >5/8</span>
+				<div class="fpart2"><img src="../images/courses/physics.jpg">
+					<iframe src="https://www.youtube.com/embed/FYE0YYuAyu0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >6/8</span>
+				<div class="fpart2"><img src="../images/courses/physics.jpg">
+					<iframe src="https://www.youtube.com/embed/FYE0YYuAyu0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >7/8</span>
+				<div class="fpart2"><img src="../images/courses/physics.jpg">
+					<iframe src="https://www.youtube.com/embed/FYE0YYuAyu0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+			<div class="dcard2"><span class="tag" >8/8</span>
+				<div class="fpart2"><img src="../images/courses/physics.jpg">
+					<iframe src="https://www.youtube.com/embed/FYE0YYuAyu0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</div>
+		</div>
+	</center>
+<br><br>
+	<div class="click-me">
+		<a href="https://youtu.be/FYE0YYuAyu0" target="_blank">Click Here to Watch full playlist</a>
+	</div>
+
+<!-- FOOTER -->
+<footer>
+	<div class="footer-container">
+		<div class="left-col">
+			<img src="../images/icon/logo - Copy.png" style="width: 200px;">
+			<div class="logo"></div>
+			<div class="social-media">
+				<a href="#"><img src="../images/icon\fb.png"></a>
+				<a href="#"><img src="../images/icon\insta.png"></a>
+				<a href="#"><img src="../images/icon\tt.png"></a>
+				<a href="#"><img src="../images/icon\ytube.png"></a>
+				<a href="#"><img src="../images/icon\linkedin.png"></a>
+			</div><br><br>
+			<p class="rights-text">Copyright © 2024 Created By Umar Shaikh, All Rights Reserved.</p>
+			<br><p><img src="../images/icon/location.png"> GEc Bharuch<br>Bharuch, Gujarat-392001</p><br>
+			<p><img src="../images/icon/phone.png"> +91-1234-567-890<br><img src="../images/icon/mail.png">&nbsp; learnedonline9419@gmail.com</p>
+		</div>
+		<div class="right-col">
+			<h1 style="color: #fff">Our Newsletter</h1>
+			<div class="border"></div><br>
+			<p>Enter Your Email to get our News and updates.</p>
+			<form class="newsletter-form">
+				<input class="txtb" type="email" placeholder="Enter Your Email">
+				<input class="btn" type="submit" value="Submit">
+			</form>
+		</div>
+	</div>
+</footer>
+
+</body>
+</html>

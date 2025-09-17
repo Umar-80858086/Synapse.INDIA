@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Books Hub</title>
+  <style>
+    :root{
+      --bg: #fdfdf9;
+      --card-bg: #ffffff;
+      --text: #2c3e50;
+      --text-light: #607882;
+      --border: rgba(44,62,80,0.06);
+      --accent: #2f3241;
+      --accent-warm: #000000;
+      --radius: 12px;
+      --shadow-sm: 0 6px 18px rgba(44,62,80,0.06);
+      --shadow-lg: 0 14px 40px rgba(44,62,80,0.12);
+      --transition: 0.36s cubic-bezier(.2,.9,.3,1);
+    }
+    /* dark theme variables */
+    .dark, html.dark {
+      --bg: #0b1220;
+      --card-bg: #0f1724;
+      --text: #e6eef8;
+      --text-light: #ffffff;
+      --border: rgba(255,255,255,0.06);
+      --accent: #3b82f6;
+      --accent-warm: #fdfdfd;
+    }
+
+    html,body{height:100%;}
+    body{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5; /* Light gray background */
+      color: #333; /* Dark gray text */
+      margin:0;padding:0;line-height:1.6;transition: background .4s ease, color .3s ease;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .main-header{
+      background: linear-gradient(90deg,var(--accent),var(--accent-warm));
+      color:#ffffff;padding:14px 28px;font-weight:700;font-size:1.15rem;box-shadow:var(--shadow-sm);
+    }
+
+    .container{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:36px auto;padding:20px;gap:20px}
+    .left{flex:1;padding-right:20px}
+    .right{flex:1;text-align:right}
+    .right img{max-width:100%;height:auto;border-radius:12px;box-shadow:var(--shadow-sm)}
+
+    .sections{max-width:1200px;margin:0 auto;padding:20px}
+    .sections h2{ text-align:center;color:var(--accent);margin-bottom:24px}
+
+    .domain-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+    .domain-card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:22px;text-align:center;transition:var(--transition);border:1px solid black;}
+    .domain-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);border-color:rgba(59,130,246,0.08)}
+    .domain-card h3{color:var(--accent);margin:0 0 8px}
+    .domain-card p{color:var(--text-light);margin:0}
+    .domain-card a{display:inline-block;margin-top:12px;padding:10px 20px;background:linear-gradient(90deg,var(--accent),var(--accent-warm));color:#fff;text-decoration:none;border-radius:10px;font-weight:600;box-shadow:0 6px 18px -8px rgba(37,99,235,0.25)}
+    .domain-card a:hover{transform:translateY(-2px)}
+
+    .main-footer{ text-align:center;padding:36px 20px;margin-top:40px;background:transparent;color:var(--text-light)}
+    .main-footer .quote{font-style:italic;font-size:1.1rem;margin-bottom:10px;color:var(--text)}
+    .main-footer .disclaimer{font-size:0.88rem}
+
+    /* floating theme toggle */
+    .floating-toggle{position:fixed;left:18px;bottom:18px;z-index:1200;width:56px;height:56px;border-radius:999px;border:none;background:var(--card-bg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-lg);transition:transform .18s,box-shadow .18s}
+    .floating-toggle i{font-size:20px;color:var(--accent)}
+    .floating-toggle:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.18)}
+
+    /* small typing cursor adjustments */
+    .text-type{display:inline-block;white-space:pre-wrap}
+    .text-type__cursor{margin-left:0.25rem;display:inline-block;opacity:1}
+    .text-type__cursor--hidden{display:none}
+    @media (max-width:700px){.container{flex-direction:column;padding:18px}.right{order:-1;text-align:center;margin-bottom:12px}}
+
+    /* Additional monochromatic styles */
+    body {
+        background-color: #f5f5f5; /* Light gray background */
+        color: #333; /* Dark gray text */
+    }
+
+    .card, .value-card, .interactive-box, .step-container, .grid, button {
+        background-color: #fff; /* White background */
+        border: 1px solid #000; /* Black border */
+        color: #000; /* Black text */
+    }
+
+    header, footer {
+        background-color: #333; /* Dark gray header and footer */
+        color: #fff; /* White text */
+    }
+
+    nav a {
+        color: #000; /* Black text for navigation links */
+        background-color: #fff; /* White background */
+        border: 1px solid #000; /* Black border */
+    }
+
+    nav a:hover {
+        background-color: #ccc; /* Light gray on hover */
+        color: #000; /* Black text */
+    }
+
+    .donation-bubble {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .donation-bubble img {
+      width: 40px;
+      height: 40px;
+    }
+  </style>
+
+  <script>
+    // Remove any dark/bright mode toggle functionality if present
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        ClassKarlo
+    </header>
+    <div class="container">
+        <div class="left">
+            <div id="animated-title"></div>
+        </div>
+        <div class="right">
+            <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Stack of Books">
+        </div>
+    </div>
+    <div class="sections">
+        <h2>Explore Books by Domain</h2>
+        <div class="domain-cards">
+            <div class="domain-card">
+                <h3>EC - Electronics and Communication</h3>
+                <p>Discover a wide range of books on electronics, communication systems, signal processing, and more.</p>
+                <a href="#ec">View Books</a>
+            </div>
+            <div class="domain-card">
+                <h3>EE - Electrical Engineering</h3>
+                <p>Explore books on electrical circuits, power systems, control systems, and electrical machinery.</p>
+                <a href="#ee">View Books</a>
+            </div>
+            <div class="domain-card">
+                <h3>CSE - Computer Science Engineering</h3>
+                <p>Find books on programming, data structures, algorithms, artificial intelligence, and software engineering.</p>
+                <a href="#cse">View Books</a>
+            </div>
+            <div class="domain-card">
+                <h3>Civil Engineering</h3>
+                <p>Browse books on structural engineering, geotechnical engineering, transportation, and construction management.</p>
+                <a href="#civil">View Books</a>
+            </div>
+            <div class="domain-card">
+                <h3>Mechanical Engineering</h3>
+                <p>Access books on mechanics, thermodynamics, fluid dynamics, manufacturing, and machine design.</p>
+                <a href="#mechanical">View Books</a>
+            </div>
+            <div class="domain-card">
+                <h3>Other Engineering Domains</h3>
+                <p>Explore books on chemical engineering, aerospace, biomedical, environmental engineering, and more.</p>
+                <a href="#other">View Books</a>
+            </div>
+        </div>
+    </div>
+    <footer class="main-footer">
+        <p class="quote">"The beautiful thing about learning is that no one can take it away from you." ❤️</p>
+        <p class="disclaimer">For educational purposes only. All content is provided under the principle of fair use for learners.</p>
+    </footer>
+    <a href="https://rzp.io/rzp/DonateToFreeEducation" class="donation-bubble" target="_blank">
+        <img src="images/donation-icon.png" alt="Donate">
+    </a>
+    <script type="text/babel">
+        const { useEffect, useRef, useState, createElement, useMemo, useCallback } = React;
+        const gsap = window.gsap;
+
+        const TextType = ({
+          text,
+          as: Component = 'div',
+          typingSpeed = 50,
+          initialDelay = 0,
+          pauseDuration = 2000,
+          deletingSpeed = 30,
+          loop = true,
+          className = '',
+          showCursor = true,
+          hideCursorWhileTyping = false,
+          cursorCharacter = '|',
+          cursorClassName = '',
+          cursorBlinkDuration = 0.5,
+          textColors = [],
+          variableSpeed,
+          onSentenceComplete,
+          startOnVisible = false,
+          reverseMode = false,
+          ...props
+        }) => {
+          const [displayedText, setDisplayedText] = useState('');
+          const [currentCharIndex, setCurrentCharIndex] = useState(0);
+          const [isDeleting, setIsDeleting] = useState(false);
+          const [currentTextIndex, setCurrentTextIndex] = useState(0);
+          const [isVisible, setIsVisible] = useState(!startOnVisible);
+          const cursorRef = useRef(null);
+          const containerRef = useRef(null);
+
+          const textArray = useMemo(() => (Array.isArray(text) ? text : [text]), [text]);
+
+          const getRandomSpeed = useCallback(() => {
+            if (!variableSpeed) return typingSpeed;
+            const { min, max } = variableSpeed;
+            return Math.random() * (max - min) + min;
+          }, [variableSpeed, typingSpeed]);
+
+          const getCurrentTextColor = () => {
+            if (textColors.length === 0) return '#ffffff';
+            return textColors[currentTextIndex % textColors.length];
+          };
+
+          useEffect(() => {
+            if (!startOnVisible || !containerRef.current) return;
+
+            const observer = new IntersectionObserver(
+              entries => {
+                entries.forEach(entry => {
+                  if (entry.isIntersecting) {
+                    setIsVisible(true);
+                  }
+                });
+              },
+              { threshold: 0.1 }
+            );
+
+            observer.observe(containerRef.current);
+            return () => observer.disconnect();
+          }, [startOnVisible]);
+
+          useEffect(() => {
+            if (showCursor && cursorRef.current) {
+              gsap.set(cursorRef.current, { opacity: 1 });
+              gsap.to(cursorRef.current, {
+                opacity: 0,
+                duration: cursorBlinkDuration,
+                repeat: -1,
+                yoyo: true,
+                ease: 'power2.inOut'
+              });
+            }
+          }, [showCursor, cursorBlinkDuration]);
+
+          useEffect(() => {
+            if (!isVisible) return;
+
+            let timeout;
+            const currentText = textArray[currentTextIndex];
+            const processedText = reverseMode ? currentText.split('').reverse().join('') : currentText;
+
+            const executeTypingAnimation = () => {
+              if (isDeleting) {
+                if (displayedText === '') {
+                  setIsDeleting(false);
+                  if (currentTextIndex === textArray.length - 1 && !loop) {
+                    return;
+                  }
+
+                  if (onSentenceComplete) {
+                    onSentenceComplete(textArray[currentTextIndex], currentTextIndex);
+                  }
+
+                  setCurrentTextIndex(prev => (prev + 1) % textArray.length);
+                  setCurrentCharIndex(0);
+                  timeout = setTimeout(() => {}, pauseDuration);
+                } else {
+                  timeout = setTimeout(() => {
+                    setDisplayedText(prev => prev.slice(0, -1));
+                  }, deletingSpeed);
+                }
+              } else {
+                if (currentCharIndex < processedText.length) {
+                  timeout = setTimeout(
+                    () => {
+                      setDisplayedText(prev => prev + processedText[currentCharIndex]);
+                      setCurrentCharIndex(prev => prev + 1);
+                    },
+                    variableSpeed ? getRandomSpeed() : typingSpeed
+                  );
+                } else if (textArray.length > 1) {
+                  timeout = setTimeout(() => {
+                    setIsDeleting(true);
+                  }, pauseDuration);
+                }
+              }
+            };
+
+            if (currentCharIndex === 0 && !isDeleting && displayedText === '') {
+              timeout = setTimeout(executeTypingAnimation, initialDelay);
+            } else {
+              executeTypingAnimation();
+            }
+
+            return () => clearTimeout(timeout);
+          }, [
+            currentCharIndex,
+            displayedText,
+            isDeleting,
+            typingSpeed,
+            deletingSpeed,
+            pauseDuration,
+            textArray,
+            currentTextIndex,
+            loop,
+            initialDelay,
+            isVisible,
+            reverseMode,
+            variableSpeed,
+            onSentenceComplete
+          ]);
+
+          const shouldHideCursor =
+            hideCursorWhileTyping && (currentCharIndex < textArray[currentTextIndex].length || isDeleting);
+
+          return createElement(
+            Component,
+            {
+              ref: containerRef,
+              className: `text-type ${className}`,
+              ...props
+            },
+            React.createElement('span', { className: 'text-type__content', style: { color: getCurrentTextColor() } }, displayedText),
+            showCursor && (
+              React.createElement(
+                'span',
+                {
+                  ref: cursorRef,
+                  className: `text-type__cursor ${cursorClassName} ${shouldHideCursor ? 'text-type__cursor--hidden' : ''}`
+                },
+                cursorCharacter
+              )
+            )
+          );
+        };
+
+        ReactDOM.render(
+          React.createElement(TextType, {
+            text: ['Welcome to Engineering Books Hub', 'Your Root Point for All Engineering Domains'],
+            as: 'h1',
+            typingSpeed: 100,
+            deletingSpeed: 50,
+            pauseDuration: 2000,
+            loop: true,
+            showCursor: true,
+            textColors: ['#4f4f51', '#000000']
+          }),
+          document.getElementById('animated-title')
+        );
+    </script>
+</body>
+</html>

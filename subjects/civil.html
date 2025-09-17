@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Civil Engineering Hub</title>
+  <style>
+    :root {
+      --bg-bright: #c8e6c9; /* Soft green */
+      --card-bg: #ffffff;
+      --text-dark: #212121;
+      --primary: #388e3c; /* Dark green */
+      --primary-dark: #2e7d32;
+      --border-black: 2px solid #000;
+      --shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-bright);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 15px;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .course-card {
+      background-color: var(--card-bg);
+      border: var(--border-black);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary), #81c784);
+    }
+
+    .course-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .course-card h3 {
+      color: var(--primary-dark);
+      margin-top: 0;
+      font-size: 1.6em;
+      border-bottom: var(--border-black);
+      padding-bottom: 12px;
+      display: inline-block;
+    }
+
+    .course-card p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .enroll-btn {
+      background-color: var(--primary);
+      color: white;
+      border: var(--border-black);
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      width: 100%;
+      font-size: 1.1em;
+    }
+
+    .enroll-btn:hover {
+      background-color: var(--primary-dark);
+      color: #fff;
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 768px) {
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>🏗️ Civil Engineering Hub</h1>
+    <p>Explore our curated civil engineering subjects</p>
+  </header>
+
+  <main class="course-grid">
+    <!-- Subject 1 -->
+    <div class="course-card">
+      <h3>🧱 Structural Engineering</h3>
+      <p>Learn about structural analysis, load distribution, and design of beams, columns, and slabs.</p>
+      <div class="course-meta">
+        <span>📘 Core</span>
+        <span>🎯 All Levels</span>
+      </div>
+      <button class="enroll-btn">EXPLORE →</button>
+    </div>
+
+    <!-- Subject 2 -->
+    <div class="course-card">
+      <h3>🌊 Fluid Mechanics</h3>
+      <p>Understand fluid properties, flow dynamics, and hydraulic systems essential for civil projects.</p>
+      <div class="course-meta">
+        <span>📘 Core</span>
+        <span>🌟 Beginner</span>
+      </div>
+      <button class="enroll-btn">EXPLORE →</button>
+    </div>
+
+    <!-- Subject 3 -->
+    <div class="course-card">
+      <h3>🛣️ Transportation Engineering</h3>
+      <p>Study highway design, traffic flow, pavement materials, and transportation planning.</p>
+      <div class="course-meta">
+        <span>📘 Core</span>
+        <span>📈 Intermediate</span>
+      </div>
+      <button class="enroll-btn">EXPLORE →</button>
+    </div>
+
+    <!-- Subject 4 -->
+    <div class="course-card">
+      <h3>🏞️ Environmental Engineering</h3>
+      <p>Explore water treatment, waste management, and pollution control techniques.</p>
+      <div class="course-meta">
+        <span>📘 Core</span>
+        <span>🌿 Essential</span>
+      </div>
+      <button class="enroll-btn">EXPLORE →</button>
+    </div>
+
+    <!-- Subject 5 -->
+    <div class="course-card">
+      <h3>🏗️ Geotechnical Engineering</h3>
+      <p>Learn soil mechanics, foundation design, and slope stability for safe construction.</p>
+      <div class="course-meta">
+        <span>📘 Core</span>
+        <span>🧠 Advanced</span>
+      </div>
+      <button class="enroll-btn">EXPLORE →</button>
+    </div>
+
+    <!-- Subject 6 -->
+    <div class="course-card">
+      <h3>📐 Surveying</h3>
+      <p>Master land surveying, GPS techniques, and mapping for construction projects.</p>
+      <div class="course-meta">
+        <span>📘 Core</span>
+        <span>🎯 Practical</span>
+      </div>
+      <button class="enroll-btn">EXPLORE →</button>
+    </div>
+  </main>
+</body>
+</html>

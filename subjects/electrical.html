@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrical Engineering Hub</title>
+    <style>
+        :root {
+            --bg-bright: #4caf50; /* Vibrant green */
+            --card-bg: #ffffff;
+            --text-dark: #212121;
+            --primary: #00796b; /* Teal */
+            --primary-dark: #004d40; /* Dark Teal */
+            --border-black: 2px solid #000;
+            --shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-bright);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .course-card {
+            background-color: var(--card-bg);
+            border: var(--border-black);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), #80cbc4);
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .course-card h3 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            font-size: 1.6em;
+            border-bottom: var(--border-black);
+            padding-bottom: 12px;
+            display: inline-block;
+        }
+
+        .course-card p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .enroll-btn {
+            background-color: var(--primary);
+            color: white;
+            border: var(--border-black);
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 1.1em;
+        }
+
+        .enroll-btn:hover {
+            background-color: var(--primary-dark);
+            color: #fff;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- Add Poppins font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>⚡ ELECTRICAL ENGINEERING COURSES</h1>
+        <p>Explore our curated collection of electrical engineering programs for GATE</p>
+    </header>
+
+    <main class="course-grid">
+        <!-- Course 1 -->
+        <div class="course-card">
+            <h3>🔌 Circuit Theory</h3>
+            <p>Understand the fundamentals of electrical circuits, including network theorems and analysis.</p>
+            <div class="course-meta">
+                <span>⏳ 8 Weeks</span>
+                <span>🌟 Beginner-Friendly</span>
+            </div>
+            <button class="enroll-btn">JOIN NOW →</button>
+        </div>
+
+        <!-- Course 2 -->
+        <div class="course-card">
+            <h3>⚙️ Electrical Machines</h3>
+            <p>Learn about transformers, DC machines, and induction motors with practical examples.</p>
+            <div class="course-meta">
+                <span>⏳ 10 Weeks</span>
+                <span>📈 Intermediate</span>
+            </div>
+            <button class="enroll-btn">JOIN NOW →</button>
+        </div>
+
+        <!-- Course 3 -->
+        <div class="course-card">
+            <h3>📐 Power Systems</h3>
+            <p>Explore power generation, transmission, and distribution systems in depth.</p>
+            <div class="course-meta">
+                <span>⏳ 12 Weeks</span>
+                <span>🎯 All Levels</span>
+            </div>
+            <button class="enroll-btn">JOIN NOW →</button>
+        </div>
+
+        <!-- Course 4 -->
+        <div class="course-card">
+            <h3>⚡ Control Systems</h3>
+            <p>Master the concepts of feedback, stability, and system dynamics for electrical systems.</p>
+            <div class="course-meta">
+                <span>⏳ 10 Weeks</span>
+                <span>🧠 Advanced</span>
+            </div>
+            <button class="enroll-btn">JOIN NOW →</button>
+        </div>
+
+        <!-- Course 5 -->
+        <div class="course-card">
+            <h3>🔋 Power Electronics</h3>
+            <p>Understand the principles of power converters, inverters, and their applications.</p>
+            <div class="course-meta">
+                <span>⏳ 8 Weeks</span>
+                <span>📱 Beginner+</span>
+            </div>
+            <button class="enroll-btn">JOIN NOW →</button>
+        </div>
+
+        <!-- Course 6 -->
+        <div class="course-card">
+            <h3>📊 Signals and Systems</h3>
+            <p>Analyze continuous and discrete-time signals, Fourier transforms, and system responses.</p>
+            <div class="course-meta">
+                <span>⏳ 10 Weeks</span>
+                <span>🎮 Intermediate</span>
+            </div>
+            <button class="enroll-btn">JOIN NOW →</button>
+        </div>
+    </main>
+</body>
+</html>
